@@ -1,0 +1,315 @@
+{
+  "id": "csp-m2-relating",
+  "course": "The Counselor Salesperson",
+  "title": "Learning and Applying the Skills of Relating",
+  "short_title": "Relating",
+  "customer_question": "How do I know that I can trust you and your company?",
+  "purpose": [
+    "Learn to recognize the symptoms of No Trust.",
+    "Learn the skills necessary to avoid No Trust."
+  ],
+  "process": [
+    "Experience the No Trust barrier to selling.",
+    "Learn four critical Relating skills for avoiding No Trust.",
+    "Practice and apply the Relating skills with a real customer."
+  ],
+  "payoff": [
+    "Recognize when customers are feeling No Trust.",
+    "Raise the customer's comfort level earlier in the sales process."
+  ],
+  "glossary": {
+    "No Trust": "A set of feelings buyers often experience early in a relationship: 'How do I know I can trust you and your company?'",
+    "Relationship Tension": "The discomfort or insecurity people feel when a relationship is new or when there is difficulty in the relationship. Usually decreases over time.",
+    "Task Tension": "The level of interest or urgency a customer feels about working with a salesperson on a given problem. Usually increases as Relationship Tension goes down.",
+    "Credibility": "An assessment of the salesperson made by the customer based on a perception of capability and believability.",
+    "Empathy": "The ability to see a situation from the customer's point of view.",
+    "Trust": "Credibility + Empathy = Trust.",
+    "Propriety": "The ability and willingness to meet the customer's expectations of business customs and behavior (dress, speech, manners, protocol, etiquette). Experienced early: first impressions.",
+    "Competence": "The perception that you have the capability and experience to help customers with their business problems. Strongest when shown through understanding of the customer's business.",
+    "Commonality": "The customer's perception that you both hold things in common: interests, beliefs, values. Key is being genuine and willing to self-disclose.",
+    "Intent": "An open declaration of your interest in the customer's success and well-being. Associated with motives. Arguably contributes more to Credibility than the other factors.",
+    "PPP": "Purpose / Process / Payoff statements: an agenda for the call that answers 'Why are we here?', 'How will we proceed?', and 'How will we both benefit?'",
+    "Ben Duffy": "A technique for demonstrating Empathy: Anticipate the customer's concerns, Convert them into questions the customer would ask, Answer the most important ones, and tell the customer you did this.",
+    "Third-Party Reference": "A story about people or organizations other than the salesperson or the customer that indirectly makes an important point. Demonstrates Competence and/or Commonality."
+  },
+  "steps": [
+    {
+      "id": "intro",
+      "type": "teach",
+      "title": "Why Relating matters",
+      "source": "LG 2.01, 2.02; PG pp. 1-3",
+      "teach_points": [
+        "Buyers early in a relationship feel No Trust: 'How do I know that I can trust you and your company?'",
+        "Key point: People buy more from people they are comfortable with.",
+        "In Relating you build trust by demonstrating Credibility and using Empathy to show positive intent to solve the buyer's problem.",
+        "Module PPP. Purpose: recognize the symptoms of No Trust and learn skills to avoid it. Process: experience the barrier, learn four Relating skills, practice with a real customer. Payoff: recognize No Trust and raise the customer's comfort level earlier.",
+        "Classroom analogy: blindfolded 'field trip'. Followers felt nervous until the guide was specific, reassuring, and listened. A new customer feels like the blindfolded follower."
+      ],
+      "question": "Think of a time you were the 'blindfolded follower' as a buyer, for example a new vendor calling you. What did they do, or fail to do, that affected how much you trusted them?",
+      "rubric": [
+        "Gives a concrete personal example rather than a generic statement.",
+        "Connects the example to trust, comfort, or feeling guided or listened to.",
+        "Names at least one specific behavior (e.g., clear explanation of what would happen, reassurance, listening, specifics)."
+      ],
+      "model_answer": "Good answers describe a specific moment, note the discomfort of not knowing what would happen, and name the behavior that raised or lowered comfort: being specific about what to expect, checking understanding, listening, reassuring.",
+      "pass_score": 2,
+      "max_attempts": 2
+    },
+    {
+      "id": "time_tension",
+      "type": "teach",
+      "title": "Time and Tension",
+      "source": "LG 2.02; PG pp. 4-5",
+      "teach_points": [
+        "Two kinds of tension exist in every buy/sell relationship.",
+        "Relationship Tension: the discomfort or insecurity a customer feels when a relationship is new or when there is difficulty. High at the start.",
+        "Task Tension: the level of interest or urgency a customer feels about working with you on a given problem. Low at the start.",
+        "Customers have limited energy. When Relationship Tension is high they cannot deal effectively with Task Tension.",
+        "Over time, if we do the right things, Relationship Tension falls and Task Tension rises. The lines cross. The right side of the crossover is the Productive Zone: the customer is comfortable with you and motivated to work on their issues.",
+        "Indicators of HIGH Relationship Tension: reluctant to talk or share, defensive body language, avoidance.",
+        "Indicators of LOW Relationship Tension: talks openly, open body language, welcoming.",
+        "Indicators of LOW Task Tension: minimizing time and availability, shifting topics and priorities, uninterested, voicing objections.",
+        "Indicators of HIGH Task Tension: initiating meetings, extending time with you, asking for your participation, introducing you to key decision makers.",
+        "The challenge of Relating: move the crossover point earlier in time. Payoff: start significant business discussions earlier."
+      ],
+      "question": "Scenario: a prospect keeps cutting your meetings short, changes the subject when you ask about their operation, and says 'just send me a brochure.' Which tension is high, which is low, and what does that tell you to work on first?",
+      "rubric": [
+        "Identifies Relationship Tension as high (or comfort as low).",
+        "Identifies Task Tension as low (minimizing time, shifting topics, low interest).",
+        "Concludes that Relationship Tension must be reduced first, before pushing the task or the sale."
+      ],
+      "model_answer": "Relationship Tension is high and Task Tension is low. Minimizing time, shifting topics and 'send a brochure' are Low Task Tension indicators; reluctance to share is High Relationship Tension. Work first on lowering Relationship Tension (Credibility and Empathy) so Task Tension can rise. Pushing the product now will not work.",
+      "pass_score": 2,
+      "max_attempts": 2
+    },
+    {
+      "id": "building_trust",
+      "type": "teach",
+      "title": "Building Trust: Credibility + Empathy",
+      "source": "LG 2.02 (Slide 6); PG p. 6",
+      "teach_points": [
+        "Two things must be demonstrated to reduce Relationship Tension and build trust: Credibility and Empathy.",
+        "Credibility: an assessment of the salesperson made by the customer, based on a perception of capability and believability.",
+        "Empathy: the ability to see a situation from the customer's point of view.",
+        "Credibility + Empathy = Trust. Together they create the perception that you are capable of helping and believable."
+      ],
+      "question": "In your own words, define Credibility and Empathy as used in Relating, and explain why one without the other is not enough.",
+      "rubric": [
+        "Credibility defined as the customer's perception of capability and believability.",
+        "Empathy defined as seeing the situation from the customer's point of view.",
+        "Explains the gap: capable but not understanding feels self-serving; understanding but not capable cannot help. Both are needed for Trust."
+      ],
+      "model_answer": "Credibility is the customer's assessment that you are capable and believable. Empathy is your ability to see the situation from their side. Credibility alone can feel like a pitch; empathy alone cannot solve the problem. Combined they produce Trust.",
+      "pass_score": 2,
+      "max_attempts": 2
+    },
+    {
+      "id": "credibility_four",
+      "type": "teach",
+      "title": "Demonstrate Credibility: Propriety, Competence, Commonality, Intent",
+      "source": "LG 2.03; PG p. 8",
+      "teach_points": [
+        "Four factors foster Credibility.",
+        "Propriety: the ability and willingness to meet the customer's expectations of business customs and behavior. Experienced early (first impressions). Includes dress, speech, manners, protocol, etiquette.",
+        "Competence: the perception that you have the capability and experience to help with their business problems. Contributes most when shown through understanding of the customer's business. Demonstrated by experience, training, background, track record.",
+        "Commonality: the customer's perception that you hold things in common: interests, beliefs, values. Key is being genuine and willing to self-disclose. Can also be shown through a shared third-party reference.",
+        "Intent: an open declaration of your interest in the customer's success and well-being. Demonstrated by disclosing your goals and objectives.",
+        "Intent arguably contributes more to Credibility than the other three factors.",
+        "These four build trust at the start AND maintain it throughout the relationship."
+      ],
+      "question": "Match each behavior to the Credibility factor it demonstrates, and say which factor is missing: (a) 'I've worked with three other regional distributors on exactly this routing problem.' (b) Arriving on time, dressed to the customer's norm, asking permission before taking notes. (c) 'I noticed you also sponsor the local robotics league; we do too.' Then state the fourth factor and give one sentence that would demonstrate it.",
+      "rubric": [
+        "(a) matched to Competence.",
+        "(b) matched to Propriety.",
+        "(c) matched to Commonality.",
+        "Names Intent as the missing factor and gives an open declaration of interest in the customer's success (e.g., 'My goal today is to understand whether we can help, not to sell you something')."
+      ],
+      "model_answer": "(a) Competence, (b) Propriety, (c) Commonality. The missing factor is Intent, for example: 'My intent today is to understand your situation well enough that we can both decide whether it makes sense to go further.'",
+      "pass_score": 3,
+      "max_attempts": 2
+    },
+    {
+      "id": "credibility_apply",
+      "type": "apply",
+      "title": "Credibility in your business",
+      "source": "LG 2.03 Credibility Exercise; PG pp. 9-13",
+      "teach_points": [
+        "In class, four teams each take one factor and list Do's, Don'ts and a personal example for their business.",
+        "Now do a compact version for your own business."
+      ],
+      "question": "For your own business, give one Do and one Don't for each of the four factors: Propriety, Competence, Commonality, Intent. Short phrases are fine.",
+      "rubric": [
+        "Covers all four factors.",
+        "Each item is specific to the learner's business or customer type, not generic.",
+        "Do's and Don'ts are consistent with the definitions (e.g., Commonality items are genuine, not fabricated; Intent items are open declarations of interest in the customer's success)."
+      ],
+      "model_answer": "Example (software to hospitals): Propriety Do: follow the hospital's visitor and privacy protocol; Don't: interrupt clinical staff. Competence Do: reference the customer's accreditation cycle; Don't: recite features. Commonality Do: mention genuine shared ties (same regional health network); Don't: invent hobbies. Intent Do: state up front 'My goal is to find out whether we fit'; Don't: hide the agenda.",
+      "pass_score": 2,
+      "max_attempts": 2
+    },
+    {
+      "id": "ppp",
+      "type": "teach",
+      "title": "Demonstrate Intent with PPP statements",
+      "source": "LG 2.04; PG pp. 14-16",
+      "teach_points": [
+        "Because Intent carries so much weight, there is a specific technique for communicating it: Purpose / Process / Payoff (PPP).",
+        "PPP statements do two things: provide an agenda for the call, and anticipate three common customer concerns.",
+        "Purpose answers 'Why are we here?' It clarifies your Intent and the objective for the call. Value: makes intent clear, reassures there is no hidden agenda.",
+        "Process answers 'How will we proceed?' It describes scope and limits, including the time it will take, and minimizes surprises. Value: clear expectations and a structure.",
+        "Payoff answers 'How will we both benefit from spending this time together?' It names value for the customer AND for you. Value: reassures the customer they will benefit; shows your intent openly.",
+        "PPP must be tailored to the customer and the phase of the sale (Relating, Discovering, Advocating, Supporting).",
+        "Relating-phase example. Purpose: 'The purpose of this call is for me to learn about your company's current situation and to share some information about my company.' Process: 'I'd like to start by exploring some questions I thought you might have about my company and me. Then, if it's all right with you, I'll ask a few questions about the issues affecting your business. I anticipate this will take about 30 minutes.' Payoff: 'As a result, you will get a better sense of our capabilities in terms of your business issues, and I will learn important information about your situation. This will help both of us decide on the appropriate next steps.' Then check: 'Does this match your expectations for the meeting?'",
+        "The Counselor Approach: use PPP statements for every customer interaction."
+      ],
+      "question": "Here is a salesperson's opening: 'Thanks for your time. I want to show you our new platform and walk through the pricing tiers. It'll take an hour. By the end you'll see why we're the market leader.' Which of Purpose, Process and Payoff are present, which are weak or missing, and what one change would most improve it?",
+      "rubric": [
+        "Recognizes Purpose is present but self-serving (show platform) rather than customer-focused.",
+        "Recognizes Process is thin (only duration, no steps, no check) and Payoff is one-sided (benefits the seller's claim, not the customer).",
+        "Proposes a concrete improvement: a mutual Payoff and/or a Purpose focused on understanding the customer, plus a check question."
+      ],
+      "model_answer": "Purpose exists but is about the seller. Process is only a duration. Payoff is missing for the customer; 'you'll see why we're the leader' is not a benefit to them. Best fix: restate Payoff as mutual ('you'll know whether this fits your situation, and I'll understand your priorities'), and end with 'Does that work for you?'",
+      "pass_score": 2,
+      "max_attempts": 2
+    },
+    {
+      "id": "ppp_write",
+      "type": "apply",
+      "title": "Write your own PPP",
+      "source": "LG 2.04 PPP Exercise; PG p. 17",
+      "teach_points": [
+        "Write Purpose/Process/Payoff statements for an upcoming call with one of your real current or prospective buyers.",
+        "Make them specific to that customer and to the phase of the sale.",
+        "Begin as though the buyer has not asked what your intent is; you bring it up yourself.",
+        "Say whether the call is face-to-face, phone, or virtual."
+      ],
+      "question": "Name the customer (first name or role is fine) and the phase of the sale. Then say your Purpose, Process and Payoff statements out loud, the way you would open the call.",
+      "rubric": [
+        "Purpose states why you are meeting in terms of the customer's situation, not only your product.",
+        "Process lists concrete steps, includes an approximate duration, and ideally previews that you will raise questions the customer may have (the Ben Duffy).",
+        "Payoff names a benefit for the customer and a benefit for the salesperson.",
+        "Ends with a check question such as 'How does that sound?'"
+      ],
+      "model_answer": "Purpose: 'The purpose of this call is to learn about how your team handles X today and share how we work with firms like yours.' Process: 'First I'd like to cover a few questions I expect you might have about us. Then I'd like to ask about your current situation. About 30 minutes.' Payoff: 'You'll get a clear picture of whether we fit, and I'll understand your priorities so neither of us wastes time. Does that work for you?'",
+      "pass_score": 3,
+      "max_attempts": 2
+    },
+    {
+      "id": "ben_duffy",
+      "type": "teach",
+      "title": "Demonstrate Empathy with the Ben Duffy",
+      "source": "LG 2.05; PG pp. 18-19",
+      "teach_points": [
+        "Credibility is only half of preparing to relate. Empathy is the other half.",
+        "The Ben Duffy story: Ben led a small new advertising agency in the 1950s. He heard the largest advertiser in the country, the American Tobacco Company, had fired its agency, and got a meeting with its president for the next day. Preparing, he was stuck on one question: 'What could I say that would convince him to trust me and my small firm?'",
+        "His insight: he stopped asking what he would say and asked what the customer would want to know. He wrote the questions he thought the president would ask, and prepared answers. In the meeting he showed the president his list. The president had made almost the same list. Ben earned the business by first earning trust.",
+        "What Ben did: looked at the call from the customer's point of view, put the customer's needs before his own, and by demonstrating Empathy also communicated Credibility.",
+        "The Ben Duffy technique has three preparation steps. Anticipate: 'If I were my customer, what concerns might I have about this call?' List them and pick the most important. Convert: turn the top concerns into questions the customer would likely ask. This list is your Ben Duffy list. Answer: prepare answers to the most important questions.",
+        "Why convert concerns into questions: it is easier to answer questions than to address vague concerns, and you can test with the customer whether your questions are accurate before answering.",
+        "KEY POINT: salespeople often think about the customer's view but never tell the customer. Telling the customer that you prepared their questions is what demonstrates Empathy. Example: 'As I was preparing for the call, I thought you might have some questions or concerns worth talking about. For example, I thought you might ask about ... Are these things you've been thinking about?'",
+        "Typical concerns by phase. Relating: fit between your company and theirs. Discovering: what you will do with the information, inappropriate questions. Advocating: appropriateness of the solution. Supporting: your company's willingness to support what it sold."
+      ],
+      "question": "What was Ben Duffy's insight, and why did it work? Then name the three preparation steps and explain why we convert concerns into questions.",
+      "rubric": [
+        "Insight: he shifted from 'what will I say' to 'what would the customer want to know' (the customer's point of view).",
+        "Why it worked: showing the list demonstrated Empathy, which also communicated Credibility, and it earned trust before asking for business.",
+        "Names Anticipate, Convert, Answer.",
+        "Explains that questions are easier to answer than concerns and can be checked for accuracy with the customer."
+      ],
+      "model_answer": "Ben stopped preparing a pitch and prepared the customer's questions instead. Showing the list proved he had looked at the call from the president's side, which built trust and credibility at once. Steps: Anticipate concerns, Convert them to questions, Answer the important ones. Questions are easier to answer than vague concerns, and you can check them with the customer before answering.",
+      "pass_score": 3,
+      "max_attempts": 2
+    },
+    {
+      "id": "ben_duffy_write",
+      "type": "apply",
+      "title": "Build your Ben Duffy list",
+      "source": "LG 2.05 Ben Duffy Exercise; PG pp. 20-21",
+      "teach_points": [
+        "Use the same upcoming call from your PPP exercise.",
+        "Anticipate two or three concerns the customer might have about the call, Convert each into a question they would likely ask, and prepare an Answer for the most important ones.",
+        "Two or three concerns is enough."
+      ],
+      "question": "For the same customer: list two or three concerns, phrase each as the question the customer would ask, and give your answer to the one you think matters most.",
+      "rubric": [
+        "Two or three concerns, each phrased as a question in the customer's voice.",
+        "Concerns are plausible for that customer and phase (e.g., fit, why you, what happens to the information, time commitment).",
+        "At least one prepared answer that is honest, specific and brief."
+      ],
+      "model_answer": "Concerns: Is this a sales pitch? Do they know my industry? What happens with what I share? As questions: 'Are you going to try to sell me something today?' 'Have you worked with companies like mine?' 'What will you do with the information I give you?' Answer to the first: 'No. Today is for me to understand your situation. If there isn't a fit I'll say so.'",
+      "pass_score": 2,
+      "max_attempts": 2
+    },
+    {
+      "id": "protocol",
+      "type": "teach",
+      "title": "Putting it together: the Relating protocol",
+      "source": "LG 2.06, 2.07; PG pp. 22-25",
+      "teach_points": [
+        "Formula: Credibility + Empathy = Trust. We use Propriety, Competence, Commonality, Intent and PPP to demonstrate Credibility. We use the Ben Duffy to demonstrate Empathy. Use these in every customer call, in every phase.",
+        "Protocol for the call. 1) Start with PPP: Purpose for this customer and phase; Process that previews your Ben Duffy ('First, I'd like to review some questions I thought you might have...') plus other agenda items; Payoff that states what is in it for the customer. 2) Check: 'Does this seem like a good way to spend our time today?' If uncomfortable, ask for their suggestions. 3) Share your Ben Duffy: 'As I was preparing, I thought that if I were in your position I might be wondering...' Use phrases like 'You may be wondering...' or 'If I were in your shoes...'. 4) Check the accuracy of your Ben Duffy questions; if wrong, ask the customer to help identify the right issues. 5) Answer the most important questions and continue the agenda.",
+        "The steps can be rearranged for the situation. Ben Duffy questions can be raised at various times. Works face-to-face, by phone and virtually. Check in and ask for confirmation often, especially virtually.",
+        "Throughout, stay aware of Propriety and offer demonstrations of Competence and Commonality.",
+        "Third-Party References: stories about people or organizations other than you or the customer that indirectly make a point. In Relating they demonstrate Competence and/or Commonality: 'Our work with ABC Company helped us learn about and resolve some of the same issues you've been talking about.'",
+        "Model call (Dave Martin with George Williams): Ben Duffy list prepared; Propriety via dress and permission questions; Competence via a third-party reference and stated specialty; Commonality via a shared acquaintance; Intent via a clear PPP with 'you may save money' as payoff."
+      ],
+      "question": "Put the five protocol steps in order, and give the exact words you would use to (a) preview your Ben Duffy inside the Process statement and (b) check the accuracy of your Ben Duffy list.",
+      "rubric": [
+        "Order: PPP, Check agreement, Share Ben Duffy, Check accuracy, Answer.",
+        "(a) A Process phrase that previews the Ben Duffy, e.g., 'First I'd like to go over a few questions I thought you might have about us.'",
+        "(b) An accuracy check, e.g., 'Are these the things you've been wondering about, or have I missed something?'"
+      ],
+      "model_answer": "1 Start with PPP, 2 Check ('Does this seem like a good use of our time?'), 3 Share Ben Duffy ('If I were in your shoes I might be wondering...'), 4 Check accuracy ('Did I get those right, or is something else more important?'), 5 Answer and continue. Preview phrase: 'First, I'd like to review some questions I thought you might have about the call.'",
+      "pass_score": 2,
+      "max_attempts": 2
+    },
+    {
+      "id": "roleplay",
+      "type": "roleplay",
+      "title": "Practice call: open a first meeting",
+      "source": "LG 2.02 Getting the Appointment; LG 2.07 protocol; LG 2.08",
+      "teach_points": [
+        "You are the salesperson. I will play the customer. This is the opening of a first, face-to-face meeting that the customer agreed to only reluctantly.",
+        "Your goal: use the full Relating protocol to lower Relationship Tension. Open with PPP, check, share your Ben Duffy, check accuracy, answer. Show Propriety, Competence, Commonality and Intent as you go. A Third-Party Reference is a bonus.",
+        "Speak as you would in the real meeting. Say 'end call' when you want to stop and get feedback."
+      ],
+      "persona": {
+        "name": "Maria Chen",
+        "role": "Director of Operations, Northwind Regional Logistics (mid-size freight carrier, 400 staff)",
+        "situation": "Northwind just reorganized and has a new mandate to cut fleet downtime. Maria agreed to a 30-minute meeting after two voicemails. She is busy, gets many sales calls of questionable value, and dislikes pitches. She has an unspoken worry: 'Is this another vendor who will waste my time and then spam my team?' She is also worried about what happens to any operational data she shares.",
+        "behavior": "Polite but guarded. Short answers at first. Gives a little more when the salesperson states clear intent, previews the agenda, names her likely concerns before she does, or shows understanding of freight operations. Pushes back if the salesperson pitches product, talks about pricing, or rushes. Warms visibly if the salesperson asks whether their PPP works for her and checks whether their anticipated questions are the right ones. Never breaks character. Never coaches the salesperson."
+      },
+      "max_turns": 7,
+      "rubric": [
+        "Opened with a Purpose statement focused on understanding the customer, not pitching.",
+        "Gave a Process statement with steps and approximate time, and previewed the Ben Duffy questions.",
+        "Gave a Payoff that named value for the customer and for the salesperson.",
+        "Checked agreement on the PPP before proceeding.",
+        "Shared a Ben Duffy list in the customer's voice ('you may be wondering...') and checked its accuracy.",
+        "Answered the most important question honestly and briefly.",
+        "Demonstrated Propriety (permission, courtesy), Competence (understanding of her business), Commonality (genuine) and Intent (open declaration).",
+        "Did not pitch product or price during the opening."
+      ],
+      "model_answer": "A strong opening: thanks Maria for the time; Purpose is to understand how the reorganization changes her downtime priorities and to share briefly how we work with carriers; Process previews 'a few questions you may have about us', then her situation, about 25 minutes; Payoff is she learns whether we are worth more of her time and we learn whether we can help; check 'does that work?'; then 'If I were in your shoes I'd be wondering whether this is a pitch, whether we understand freight ops, and what happens to anything you tell me. Did I get those right?'; then answer them.",
+      "pass_score": 5
+    },
+    {
+      "id": "reflect",
+      "type": "reflect",
+      "title": "Apply to your real customer",
+      "source": "LG 2.08; PG pp. 26-28 Counselor Planner: Relating",
+      "teach_points": [
+        "The Relating Planner has four parts: your objective for the interaction; your PPP statement with a check; your Ben Duffy questions and how you will respond; and how you will demonstrate Propriety, Competence, Commonality and Positive Intent.",
+        "Once you have earned the customer's trust, you have earned the right to move to the Discovering phase."
+      ],
+      "question": "Last step. Thinking about the real customer you used earlier: what is your objective for the next interaction, and what will you do differently because of this module?",
+      "rubric": [
+        "States a concrete objective (what the customer should do as a result of the interaction).",
+        "Names at least one specific change tied to a Relating skill (PPP, Ben Duffy, a Credibility factor, checking in)."
+      ],
+      "model_answer": "Objective: get agreement to a discovery meeting with the operations lead. Change: open with a customer-focused Purpose, preview my Ben Duffy in the Process statement, and actually tell the customer I prepared their questions instead of keeping it in my head.",
+      "pass_score": 1,
+      "max_attempts": 1
+    }
+  ]
+}

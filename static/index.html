@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Counselor Trainer</title>
+<link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+<div id="app">
+  <aside id="rail">
+    <div class="brand">
+      <div class="logo">W</div>
+      <div><div class="brand-title">AI Trainer</div><div class="brand-sub" id="module-title">Loading…</div></div>
+    </div>
+    <ol id="steps"></ol>
+    <div class="rail-foot">
+      <div class="score-line"><span>Score</span><strong id="score-total">0 / 0</strong></div>
+      <div class="voice-row"><label><input type="checkbox" id="tts" checked> Voice on</label>
+        <label title="Send automatically when you stop talking"><input type="checkbox" id="handsfree"> Hands-free</label></div>
+      <div class="voice-row"><select id="voice"></select></div>
+    </div>
+  </aside>
+
+  <main id="main">
+    <header id="topbar">
+      <div>
+        <div id="step-now">—</div>
+        <div id="status" class="status idle"><span class="dot"></span><span id="status-text">Ready</span></div>
+      </div>
+      <div class="actions">
+        <button id="btn-stop" class="danger" hidden>■ Stop</button>
+        <button id="btn-repeat" title="Explain again">Repeat</button>
+        <button id="btn-skip" title="Skip this step">Skip</button>
+        <button id="btn-restart" title="Restart module">Restart</button>
+      </div>
+    </header>
+
+    <section id="start-card">
+      <h1>The Counselor Salesperson</h1>
+      <h2 id="start-module">Learning and Applying the Skills of Relating</h2>
+      <p>Your AI facilitator teaches each concept, asks you a question, assesses your answer, and moves you on. One live role-play. Speak or type. You can stop the voice or interrupt at any time.</p>
+      <label>Your first name <input id="learner-name" placeholder="optional"></label>
+      <button id="btn-start" class="primary">Start module</button>
+    </section>
+
+    <section id="persona" class="persona-card" hidden>
+      <div class="persona-avatar" id="persona-initial">M</div>
+      <div class="persona-body">
+        <div class="persona-name" id="persona-name"></div>
+        <div class="persona-role" id="persona-role"></div>
+        <div class="persona-sit" id="persona-sit"></div>
+      </div>
+      <div class="persona-side">
+        <div class="turns" id="turns">Turn 0 / 7</div>
+        <button id="btn-hint" title="Pause the role-play and get a coaching hint">Teach me</button>
+        <button id="btn-endcall" class="danger">End call</button>
+      </div>
+    </section>
+
+    <section id="stage" hidden>
+      <div id="avatar-big"></div>
+      <div class="stage-text"><div id="stage-line">Ready when you are.</div><div class="stage-sub" id="stage-sub"></div></div>
+    </section>
+
+    <section id="chat" hidden></section>
+
+    <footer id="composer" hidden>
+      <div id="avatar" class="avatar" hidden><div class="pulse"></div></div>
+      <textarea id="input" rows="1" placeholder="Type your answer, or tap the mic and speak…"></textarea>
+      <button id="btn-mic" title="Tap to talk, tap again to stop">🎤</button>
+      <button id="btn-send" class="primary">Send</button>
+    </footer>
+  </main>
+</div>
+<script src="/static/avatar.js"></script>
+<script src="/static/app.js"></script>
+</body>
+</html>
