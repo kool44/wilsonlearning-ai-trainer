@@ -288,7 +288,8 @@ function setBusy(b, label) {
 
 // ---------- API
 async function api(path, body) {
-  const r = await fetch(path, { method: body ? "POST" : "GET", headers: { "Content-Type": "application/json" }, body: body ? JSON.stringify(body) : undefined });
+  // Relative URL so the app also works when served under a subpath such as /poc/csp-trainer/
+  const r = await fetch(path.replace(/^\//, ""), { method: body ? "POST" : "GET", headers: { "Content-Type": "application/json" }, body: body ? JSON.stringify(body) : undefined });
   if (!r.ok) throw new Error(r.status === 404 ? "This session has expired. Tap Restart to begin again." : await r.text());
   return r.json();
 }
