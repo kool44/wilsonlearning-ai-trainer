@@ -26,6 +26,7 @@
     <header id="topbar">
       <div>
         <div id="step-now">—</div>
+        <span id="streak" class="streak" hidden></span>
         <div id="status" class="status idle"><span class="dot"></span><span id="status-text">Ready</span></div>
       </div>
       <div class="actions">
@@ -35,12 +36,13 @@
         <button id="btn-restart" title="Restart module">Restart</button>
       </div>
     </header>
+    <div id="progress-bar" hidden><i id="bar-fill"></i></div>
 
     <section id="start-card">
       <h1>The Counselor Salesperson</h1>
       <h2 id="start-module">Learning and Applying the Skills of Relating</h2>
-      <p>Your AI facilitator teaches each concept, asks you a question, assesses your answer, and moves you on. One live role-play. Speak or type. You can stop the voice or interrupt at any time.</p>
-      <label>Your first name <input id="learner-name" placeholder="optional"></label>
+      <p>About 20 minutes. Short spoken lessons, quick tap-to-answer checks, a few questions about your own customers, and a live practice call with an AI customer. Speak or type, and interrupt any time. Every run draws different questions and a different customer.</p>
+      <label>Your first name <input id="learner-name" placeholder="optional" autocomplete="given-name"></label>
       <button id="btn-start" class="primary">Start module</button>
     </section>
 

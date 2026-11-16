@@ -190,6 +190,7 @@ class AnthropicProvider:
             "task": "The learner is stuck mid role-play and asked for help. Speak as the facilitator, not the customer. "
                     "In at most 110 words: say what the protocol step they should do next is, give one example sentence "
                     "they could say, then tell them the customer is waiting and to carry on. Do not grade them.",
+            "customer": step["persona"]["name"] + ", " + step["persona"]["role"],
             "rubric": step["rubric"],
             "model_answer": step.get("model_answer"),
             "transcript_so_far": [{"speaker": t["role"], "text": t["text"]} for t in transcript],
@@ -297,7 +298,7 @@ class MockProvider:
 
     def hint(self, module, step, transcript) -> str:
         return ("Mock coach: next, share your Ben Duffy. Try: 'If I were in your shoes I might be wondering whether this "
-                "is a pitch. Did I get that right?' Maria is waiting. Carry on.")
+                "is a pitch. Did I get that right?' The customer is waiting. Carry on.")
 
     def grade_roleplay(self, module, step, transcript) -> dict:
         n = len(step["rubric"])

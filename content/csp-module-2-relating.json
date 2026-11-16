@@ -53,7 +53,50 @@
       ],
       "model_answer": "Good answers describe a specific moment, note the discomfort of not knowing what would happen, and name the behavior that raised or lowered comfort: being specific about what to expect, checking understanding, listening, reassuring.",
       "pass_score": 2,
-      "max_attempts": 2
+      "max_attempts": 2,
+      "script": [
+        "Hey {name}, welcome! Quick gut check: would you buy from someone you don't trust? Me neither. That's the whole idea behind Relating. People buy more from people they're comfortable with.",
+        "Early on, every buyer is quietly asking one thing: how do I know I can trust you and your company? We call that feeling No Trust. Today you'll learn to spot it, and to melt it.",
+        "Picture being led around blindfolded by a stranger. Nervous, right? Until they tell you exactly what's coming, and actually listen. That's how a new customer feels with you. Let's try one."
+      ],
+      "activities": [
+        {
+          "type": "choice",
+          "prompt": "A new vendor calls you out of the blue. Which move would make you most comfortable?",
+          "options": [
+            "They say why they're calling, how long it will take, and what's in it for you",
+            "They jump straight into their best product features",
+            "They tell you they're the market leader",
+            "They offer a discount if you decide today"
+          ],
+          "answer": 0,
+          "why": "Being specific about what will happen, and why it's worth your time, is exactly what the blindfolded follower needed. Comfort first, then business."
+        },
+        {
+          "type": "choice",
+          "prompt": "What's the key point behind Relating?",
+          "options": [
+            "People buy more from people they're comfortable with",
+            "The best product always wins",
+            "Settle price first so there are no surprises",
+            "Talk more than the customer so they see your expertise"
+          ],
+          "answer": 0,
+          "why": "Comfort drives buying. Relating is about raising the customer's comfort early."
+        },
+        {
+          "type": "open",
+          "prompt": "Think of a time you were the blindfolded follower as a buyer, say a new vendor calling you. What did they do, or fail to do, that changed how much you trusted them?",
+          "rubric": [
+            "Gives a concrete personal example rather than a generic statement.",
+            "Connects the example to trust, comfort, or feeling guided or listened to.",
+            "Names at least one specific behavior (e.g., clear explanation of what would happen, reassurance, listening, specifics)."
+          ],
+          "model_answer": "Good answers describe a specific moment, note the discomfort of not knowing what would happen, and name the behavior that raised or lowered comfort: being specific about what to expect, checking understanding, listening, reassuring.",
+          "pass_score": 2,
+          "max_attempts": 2
+        }
+      ]
     },
     {
       "id": "time_tension",
@@ -80,7 +123,62 @@
       ],
       "model_answer": "Relationship Tension is high and Task Tension is low. Minimizing time, shifting topics and 'send a brochure' are Low Task Tension indicators; reluctance to share is High Relationship Tension. Work first on lowering Relationship Tension (Credibility and Empathy) so Task Tension can rise. Pushing the product now will not work.",
       "pass_score": 2,
-      "max_attempts": 2
+      "max_attempts": 2,
+      "script": [
+        "Every new relationship carries two kinds of tension. Relationship Tension is the discomfort of not knowing you yet. It starts high. Task Tension is the customer's urgency to work on their problem with you. It starts low.",
+        "Customers only have so much energy. While Relationship Tension is high, they can't focus on the task. Do the right things and the lines cross. Past that crossover is the Productive Zone: comfortable, and motivated to work.",
+        "Your job in Relating is to pull that crossover earlier. So watch the signals. Let's read a customer."
+      ],
+      "activities": [
+        {
+          "type": "choice",
+          "prompt": "A prospect keeps cutting meetings short, dodges questions about their operation, and says 'just send me a brochure.' What's going on?",
+          "options": [
+            "Relationship Tension is high and Task Tension is low, so build trust first",
+            "Task Tension is high, so send the brochure and close fast",
+            "Both tensions are low, so they're ready to buy",
+            "Relationship Tension is low, so push into pricing"
+          ],
+          "answer": 0,
+          "why": "Minimizing time and shifting topics signal low Task Tension. Reluctance to share signals high Relationship Tension. Lower the Relationship Tension first."
+        },
+        {
+          "type": "choice",
+          "prompt": "Your contact asks you to stay for another meeting and offers to introduce you to her VP. Where are you?",
+          "options": [
+            "In the Productive Zone: low Relationship Tension, high Task Tension",
+            "Still stuck at high Relationship Tension",
+            "Low Task Tension, she's just being polite",
+            "Too early to tell anything"
+          ],
+          "answer": 0,
+          "why": "Extending time and introducing you to decision makers are classic signs of high Task Tension. The trust is there."
+        },
+        {
+          "type": "choice",
+          "prompt": "A buyer is friendly and chats openly, but keeps saying the project isn't a priority this year. Read the tensions.",
+          "options": [
+            "Relationship Tension low, Task Tension low",
+            "Relationship Tension high, Task Tension high",
+            "Relationship Tension high, Task Tension low",
+            "Both are high"
+          ],
+          "answer": 0,
+          "why": "Open, friendly talk means low Relationship Tension. 'Not a priority' means Task Tension is still low. Comfort is there, urgency isn't yet."
+        },
+        {
+          "type": "open",
+          "prompt": "Scenario: a prospect keeps cutting your meetings short, changes the subject when you ask about their operation, and says 'just send me a brochure.' Which tension is high, which is low, and what does that tell you to work on first?",
+          "rubric": [
+            "Identifies Relationship Tension as high (or comfort as low).",
+            "Identifies Task Tension as low (minimizing time, shifting topics, low interest).",
+            "Concludes that Relationship Tension must be reduced first, before pushing the task or the sale."
+          ],
+          "model_answer": "Relationship Tension is high and Task Tension is low. Minimizing time, shifting topics and 'send a brochure' are Low Task Tension indicators; reluctance to share is High Relationship Tension. Work first on lowering Relationship Tension (Credibility and Empathy) so Task Tension can rise. Pushing the product now will not work.",
+          "pass_score": 2,
+          "max_attempts": 2
+        }
+      ]
     },
     {
       "id": "building_trust",
@@ -101,7 +199,61 @@
       ],
       "model_answer": "Credibility is the customer's assessment that you are capable and believable. Empathy is your ability to see the situation from their side. Credibility alone can feel like a pitch; empathy alone cannot solve the problem. Combined they produce Trust.",
       "pass_score": 2,
-      "max_attempts": 2
+      "max_attempts": 2,
+      "script": [
+        "So how do you lower Relationship Tension? Two ingredients. Credibility: the customer's judgment that you're capable and believable. Empathy: your ability to see the situation from their side.",
+        "Here's the formula to remember, {name}: Credibility plus Empathy equals Trust. Leave one out and it falls apart. Let's test that."
+      ],
+      "activities": [
+        {
+          "type": "choice",
+          "prompt": "A rep knows the product cold but never asks about the customer's situation. What's missing?",
+          "options": [
+            "Empathy",
+            "Credibility",
+            "Propriety",
+            "Nothing, expertise is enough"
+          ],
+          "answer": 0,
+          "why": "Capability without seeing their side feels like a pitch. Without Empathy there's no Trust."
+        },
+        {
+          "type": "choice",
+          "prompt": "A rep is warm and understanding, but can't answer basic questions about how they'd help. What's missing?",
+          "options": [
+            "Credibility",
+            "Empathy",
+            "Commonality",
+            "Nothing, rapport is enough"
+          ],
+          "answer": 0,
+          "why": "Understanding without capability can't solve the problem. The customer has to believe you can actually help."
+        },
+        {
+          "type": "choice",
+          "prompt": "Finish the formula: Credibility plus what equals Trust?",
+          "options": [
+            "Empathy",
+            "Competence",
+            "Persistence",
+            "A good price"
+          ],
+          "answer": 0,
+          "why": "Credibility plus Empathy equals Trust. You need both."
+        },
+        {
+          "type": "open",
+          "prompt": "In your own words, define Credibility and Empathy as used in Relating, and explain why one without the other is not enough.",
+          "rubric": [
+            "Credibility defined as the customer's perception of capability and believability.",
+            "Empathy defined as seeing the situation from the customer's point of view.",
+            "Explains the gap: capable but not understanding feels self-serving; understanding but not capable cannot help. Both are needed for Trust."
+          ],
+          "model_answer": "Credibility is the customer's assessment that you are capable and believable. Empathy is your ability to see the situation from their side. Credibility alone can feel like a pitch; empathy alone cannot solve the problem. Combined they produce Trust.",
+          "pass_score": 2,
+          "max_attempts": 2
+        }
+      ]
     },
     {
       "id": "credibility_four",
@@ -126,7 +278,74 @@
       ],
       "model_answer": "(a) Competence, (b) Propriety, (c) Commonality. The missing factor is Intent, for example: 'My intent today is to understand your situation well enough that we can both decide whether it makes sense to go further.'",
       "pass_score": 3,
-      "max_attempts": 2
+      "max_attempts": 2,
+      "script": [
+        "Credibility rests on four factors. Propriety: meeting the customer's expectations of business customs, like dress, manners and protocol. First impressions live here. Competence: showing you can help, strongest when you show you understand their business.",
+        "Commonality: genuine things you share, like interests, values, even a mutual contact. Be real, never fake it. And Intent: openly declaring you care about the customer's success.",
+        "Of the four, Intent often carries the most weight. And they don't stop after day one. They keep trust alive for the whole relationship. Quick round."
+      ],
+      "activities": [
+        {
+          "type": "choice",
+          "prompt": "'I've worked with three other regional distributors on exactly this routing problem.' Which factor is that?",
+          "options": [
+            "Competence",
+            "Propriety",
+            "Commonality",
+            "Intent"
+          ],
+          "answer": 0,
+          "why": "Relevant experience with their kind of problem shows Competence."
+        },
+        {
+          "type": "choice",
+          "prompt": "You arrive on time, dressed to the customer's norm, and ask before taking notes. Which factor?",
+          "options": [
+            "Propriety",
+            "Competence",
+            "Commonality",
+            "Intent"
+          ],
+          "answer": 0,
+          "why": "Meeting expectations of business customs and manners is Propriety. That's the first impression."
+        },
+        {
+          "type": "choice",
+          "prompt": "'I noticed you sponsor the local robotics league. We do too.' Which factor?",
+          "options": [
+            "Commonality",
+            "Propriety",
+            "Competence",
+            "Intent"
+          ],
+          "answer": 0,
+          "why": "A genuine shared interest builds Commonality. Only use it if it's true."
+        },
+        {
+          "type": "choice",
+          "prompt": "'My goal today is to see whether we can genuinely help, not to sell you something.' Which factor?",
+          "options": [
+            "Intent",
+            "Commonality",
+            "Competence",
+            "Propriety"
+          ],
+          "answer": 0,
+          "why": "An open declaration of interest in the customer's success is Intent."
+        },
+        {
+          "type": "choice",
+          "prompt": "Which factor arguably contributes the most to Credibility?",
+          "options": [
+            "Intent",
+            "Propriety",
+            "Competence",
+            "Commonality"
+          ],
+          "answer": 0,
+          "why": "Intent tends to carry the most weight. Customers want to know why you're really there."
+        }
+      ]
     },
     {
       "id": "credibility_apply",
@@ -145,7 +364,36 @@
       ],
       "model_answer": "Example (software to hospitals): Propriety Do: follow the hospital's visitor and privacy protocol; Don't: interrupt clinical staff. Competence Do: reference the customer's accreditation cycle; Don't: recite features. Commonality Do: mention genuine shared ties (same regional health network); Don't: invent hobbies. Intent Do: state up front 'My goal is to find out whether we fit'; Don't: hide the agenda.",
       "pass_score": 2,
-      "max_attempts": 2
+      "max_attempts": 2,
+      "script": [
+        "Now make it yours, {name}. Think about your own customers and how these factors show up in your world."
+      ],
+      "activities": [
+        {
+          "type": "open",
+          "prompt": "Pick one of the four factors: Propriety, Competence, Commonality or Intent. For your own business, give me one Do and one Don't.",
+          "rubric": [
+            "Names one of the four Credibility factors.",
+            "The Do is specific to the learner's business and fits that factor's definition.",
+            "The Don't is specific and fits the definition (for example no fake Commonality, no hidden agenda for Intent)."
+          ],
+          "model_answer": "Example for hospital software, Intent. Do: say up front 'my goal is to find out whether we fit.' Don't: hide that you want a demo slot.",
+          "pass_score": 2,
+          "max_attempts": 2
+        },
+        {
+          "type": "open",
+          "prompt": "How would you show Intent to a brand-new prospect in your business? Say it in one or two sentences, the way you'd actually say it.",
+          "rubric": [
+            "Openly declares interest in the customer's success or in understanding their situation.",
+            "Fits the learner's business or customer, not a generic line.",
+            "Is not a product pitch and does not hide an agenda."
+          ],
+          "model_answer": "'Before anything else, my goal today is to understand how your team handles scheduling now. If we can't help, I'll tell you.'",
+          "pass_score": 2,
+          "max_attempts": 2
+        }
+      ]
     },
     {
       "id": "ppp",
@@ -170,7 +418,60 @@
       ],
       "model_answer": "Purpose exists but is about the seller. Process is only a duration. Payoff is missing for the customer; 'you'll see why we're the leader' is not a benefit to them. Best fix: restate Payoff as mutual ('you'll know whether this fits your situation, and I'll understand your priorities'), and end with 'Does that work for you?'",
       "pass_score": 2,
-      "max_attempts": 2
+      "max_attempts": 2,
+      "script": [
+        "Since Intent matters so much, there's a tool for it: PPP. Purpose answers why are we here. Process answers how we'll spend the time, the steps and how long. Payoff answers what's in it for both of us.",
+        "A good PPP gives the call an agenda and answers worries before they're voiced. Then check it: does that match what you expected? Use it in every interaction. Let's spot some gaps."
+      ],
+      "activities": [
+        {
+          "type": "choice",
+          "prompt": "An opening: 'Thanks for your time. I want to show you our new platform and pricing tiers. It'll take an hour. You'll see why we're the market leader.' What's the biggest problem?",
+          "options": [
+            "Purpose and Payoff are about the seller, not the customer",
+            "It's too short",
+            "It has a Process but no Purpose",
+            "Nothing, it's a solid PPP"
+          ],
+          "answer": 0,
+          "why": "The Purpose is a pitch and the Payoff only serves the seller. A Counselor focuses the Purpose on the customer and names a Payoff for both sides."
+        },
+        {
+          "type": "choice",
+          "prompt": "'The purpose today is to learn about your fleet challenges. I'll ask a few questions, then share how we've helped others. About twenty minutes.' What's missing?",
+          "options": [
+            "A Payoff and a check question",
+            "A Purpose",
+            "A Process",
+            "A time estimate"
+          ],
+          "answer": 0,
+          "why": "Purpose and Process are there. Add what's in it for both of you, then check: does that work for you?"
+        },
+        {
+          "type": "choice",
+          "prompt": "Which is the strongest Payoff?",
+          "options": [
+            "You'll get a clear sense of whether we fit, and I'll understand your priorities, so we both know the right next step",
+            "You'll see why our product beats the competition",
+            "I'll be able to send you a tailored quote",
+            "We'll get through my slides on time"
+          ],
+          "answer": 0,
+          "why": "A Payoff names value for the customer and for you."
+        },
+        {
+          "type": "order",
+          "prompt": "Put the parts of a call opening in order.",
+          "items": [
+            "Purpose: why we're here",
+            "Process: how we'll spend the time",
+            "Payoff: what's in it for both of us",
+            "Check: does that work for you?"
+          ],
+          "why": "Purpose, Process, Payoff, then check. The check lets the customer shape the agenda."
+        }
+      ]
     },
     {
       "id": "ppp_write",
@@ -192,7 +493,38 @@
       ],
       "model_answer": "Purpose: 'The purpose of this call is to learn about how your team handles X today and share how we work with firms like yours.' Process: 'First I'd like to cover a few questions I expect you might have about us. Then I'd like to ask about your current situation. About 30 minutes.' Payoff: 'You'll get a clear picture of whether we fit, and I'll understand your priorities so neither of us wastes time. Does that work for you?'",
       "pass_score": 3,
-      "max_attempts": 2
+      "max_attempts": 2,
+      "script": [
+        "Your turn to build one, {name}. Pick a real customer you'll see soon. Say your PPP out loud, exactly as you'd open the call. Don't forget the check at the end."
+      ],
+      "activities": [
+        {
+          "type": "open",
+          "prompt": "Name the customer (first name or role is fine) and the phase of the sale. Then say your Purpose, Process and Payoff statements out loud, the way you would open the call.",
+          "rubric": [
+            "Purpose states why you are meeting in terms of the customer's situation, not only your product.",
+            "Process lists concrete steps, includes an approximate duration, and ideally previews that you will raise questions the customer may have (the Ben Duffy).",
+            "Payoff names a benefit for the customer and a benefit for the salesperson.",
+            "Ends with a check question such as 'How does that sound?'"
+          ],
+          "model_answer": "Purpose: 'The purpose of this call is to learn about how your team handles X today and share how we work with firms like yours.' Process: 'First I'd like to cover a few questions I expect you might have about us. Then I'd like to ask about your current situation. About 30 minutes.' Payoff: 'You'll get a clear picture of whether we fit, and I'll understand your priorities so neither of us wastes time. Does that work for you?'",
+          "pass_score": 3,
+          "max_attempts": 2
+        },
+        {
+          "type": "open",
+          "prompt": "Different scene: an existing customer is unhappy about a delayed delivery and agreed to a call. Give me the PPP you'd open with, plus your check question.",
+          "rubric": [
+            "Purpose focuses on understanding the customer's situation and concern, not defending or selling.",
+            "Process gives concrete steps and an approximate time.",
+            "Payoff names a benefit for the customer and for the salesperson.",
+            "Ends with a check question such as 'Does that work for you?'"
+          ],
+          "model_answer": "'The purpose is to understand how the delay hit your team and agree on a fix. I'll start with what I think you may be wondering, then hear your side, then we'll agree next steps. Fifteen minutes. You'll leave with a clear plan, and I'll know what to put right. Does that work?'",
+          "pass_score": 3,
+          "max_attempts": 2
+        }
+      ]
     },
     {
       "id": "ben_duffy",
@@ -218,7 +550,60 @@
       ],
       "model_answer": "Ben stopped preparing a pitch and prepared the customer's questions instead. Showing the list proved he had looked at the call from the president's side, which built trust and credibility at once. Steps: Anticipate concerns, Convert them to questions, Answer the important ones. Questions are easier to answer than vague concerns, and you can check them with the customer before answering.",
       "pass_score": 3,
-      "max_attempts": 2
+      "max_attempts": 2,
+      "script": [
+        "Story time. The nineteen fifties. Ben Duffy runs a small ad agency and lands a meeting with the president of the biggest advertiser in the country. Overnight he's stuck on one thing: what can I say to make him trust us?",
+        "Then he flips it. Not what will I say, but what would he want to know? He writes down the president's likely questions and his answers. In the meeting he shows the list. The president had nearly the same list. Ben won the account.",
+        "That's the technique. Anticipate the customer's concerns. Convert them into questions in the customer's voice. Answer the most important ones. And the key: tell the customer you did it. That's what shows Empathy."
+      ],
+      "activities": [
+        {
+          "type": "order",
+          "prompt": "Put the Ben Duffy preparation steps in order.",
+          "items": [
+            "Anticipate the customer's concerns",
+            "Convert concerns into questions",
+            "Answer the most important questions"
+          ],
+          "why": "Anticipate, Convert, Answer."
+        },
+        {
+          "type": "choice",
+          "prompt": "What was Ben Duffy's real insight?",
+          "options": [
+            "He asked what the customer would want to know, instead of what he'd say",
+            "He prepared a sharper pitch than the competition",
+            "He offered a lower price",
+            "He brought his senior partners along"
+          ],
+          "answer": 0,
+          "why": "He looked at the meeting from the customer's side. That Empathy also built his Credibility."
+        },
+        {
+          "type": "choice",
+          "prompt": "Why convert concerns into questions?",
+          "options": [
+            "Questions are easier to answer, and you can check with the customer that they're the right ones",
+            "Questions sound more professional",
+            "It saves preparation time",
+            "Customers prefer surveys"
+          ],
+          "answer": 0,
+          "why": "Vague worries are hard to address. Questions you can test and answer."
+        },
+        {
+          "type": "choice",
+          "prompt": "You've prepared a great Ben Duffy list. What makes it actually demonstrate Empathy?",
+          "options": [
+            "Telling the customer you prepared their likely questions",
+            "Keeping it in your notes as a backup",
+            "Emailing it after the meeting",
+            "Answering everything before they can ask"
+          ],
+          "answer": 0,
+          "why": "Thinking about their view isn't enough. Saying it out loud is what shows Empathy."
+        }
+      ]
     },
     {
       "id": "ben_duffy_write",
@@ -238,7 +623,24 @@
       ],
       "model_answer": "Concerns: Is this a sales pitch? Do they know my industry? What happens with what I share? As questions: 'Are you going to try to sell me something today?' 'Have you worked with companies like mine?' 'What will you do with the information I give you?' Answer to the first: 'No. Today is for me to understand your situation. If there isn't a fit I'll say so.'",
       "pass_score": 2,
-      "max_attempts": 2
+      "max_attempts": 2,
+      "script": [
+        "Same customer you used for your PPP, {name}. Put yourself in their chair for a second. What would you be worried about?"
+      ],
+      "activities": [
+        {
+          "type": "open",
+          "prompt": "For the same customer: list two or three concerns, phrase each as the question the customer would ask, and give your answer to the one you think matters most.",
+          "rubric": [
+            "Two or three concerns, each phrased as a question in the customer's voice.",
+            "Concerns are plausible for that customer and phase (e.g., fit, why you, what happens to the information, time commitment).",
+            "At least one prepared answer that is honest, specific and brief."
+          ],
+          "model_answer": "Concerns: Is this a sales pitch? Do they know my industry? What happens with what I share? As questions: 'Are you going to try to sell me something today?' 'Have you worked with companies like mine?' 'What will you do with the information I give you?' Answer to the first: 'No. Today is for me to understand your situation. If there isn't a fit I'll say so.'",
+          "pass_score": 2,
+          "max_attempts": 2
+        }
+      ]
     },
     {
       "id": "protocol",
@@ -261,7 +663,61 @@
       ],
       "model_answer": "1 Start with PPP, 2 Check ('Does this seem like a good use of our time?'), 3 Share Ben Duffy ('If I were in your shoes I might be wondering...'), 4 Check accuracy ('Did I get those right, or is something else more important?'), 5 Answer and continue. Preview phrase: 'First, I'd like to review some questions I thought you might have about the call.'",
       "pass_score": 2,
-      "max_attempts": 2
+      "max_attempts": 2,
+      "script": [
+        "Let's put it all together. Open with your PPP and preview your Ben Duffy in the Process. Check they agree. Share your Ben Duffy: if I were in your shoes, I might be wondering. Check it's accurate. Then answer and carry on.",
+        "Sprinkle in Propriety, Competence and Commonality as you go. A Third-Party Reference helps too: our work with a company like yours taught us something. Works in person, by phone or on video. Quick drill."
+      ],
+      "activities": [
+        {
+          "type": "order",
+          "prompt": "Put the five protocol steps in order.",
+          "items": [
+            "Open with PPP",
+            "Check agreement",
+            "Share your Ben Duffy",
+            "Check its accuracy",
+            "Answer and continue"
+          ],
+          "why": "PPP, check, share the Ben Duffy, check accuracy, answer. The checks keep the customer in control."
+        },
+        {
+          "type": "choice",
+          "prompt": "You share your Ben Duffy and the customer says 'that's not really my concern.' What now?",
+          "options": [
+            "Ask them to help you identify what's really on their mind",
+            "Answer your prepared questions anyway",
+            "Move straight to the product demo",
+            "Apologize and wrap up the meeting"
+          ],
+          "answer": 0,
+          "why": "Checking accuracy is the point. If you guessed wrong, let the customer steer you to the real issues."
+        },
+        {
+          "type": "choice",
+          "prompt": "Which line previews your Ben Duffy inside the Process statement?",
+          "options": [
+            "'First, I'd like to go over a few questions I thought you might have about us.'",
+            "'First, let me show you our product roadmap.'",
+            "'First, can you tell me your budget?'",
+            "'First, I'll give you some background on my career.'"
+          ],
+          "answer": 0,
+          "why": "Previewing the Ben Duffy in your Process tells the customer you've thought about their side."
+        },
+        {
+          "type": "choice",
+          "prompt": "Which one is a Third-Party Reference?",
+          "options": [
+            "'Our work with a regional carrier helped us solve the same downtime issues you mentioned.'",
+            "'I have ten years in sales.'",
+            "'We're the cheapest option out there.'",
+            "'I grew up in this city too.'"
+          ],
+          "answer": 0,
+          "why": "A story about another organization indirectly shows Competence, and sometimes Commonality."
+        }
+      ]
     },
     {
       "id": "roleplay",
@@ -291,7 +747,30 @@
         "Did not pitch product or price during the opening."
       ],
       "model_answer": "A strong opening: thanks Maria for the time; Purpose is to understand how the reorganization changes her downtime priorities and to share briefly how we work with carriers; Process previews 'a few questions you may have about us', then her situation, about 25 minutes; Payoff is she learns whether we are worth more of her time and we learn whether we can help; check 'does that work?'; then 'If I were in your shoes I'd be wondering whether this is a pitch, whether we understand freight ops, and what happens to anything you tell me. Did I get those right?'; then answer them.",
-      "pass_score": 5
+      "pass_score": 5,
+      "script": [
+        "Showtime, {name}. You're the salesperson, I'll play the customer. Open a first meeting using the full protocol. Say 'end call' when you're done, or tap Teach me if you get stuck."
+      ],
+      "personas": [
+        {
+          "name": "Maria Chen",
+          "role": "Director of Operations, Northwind Regional Logistics (mid-size freight carrier, 400 staff)",
+          "situation": "Northwind just reorganized and has a new mandate to cut fleet downtime. Maria agreed to a 30-minute meeting after two voicemails. She is busy, gets many sales calls of questionable value, and dislikes pitches. She has an unspoken worry: 'Is this another vendor who will waste my time and then spam my team?' She is also worried about what happens to any operational data she shares.",
+          "behavior": "Polite but guarded. Short answers at first. Gives a little more when the salesperson states clear intent, previews the agenda, names her likely concerns before she does, or shows understanding of freight operations. Pushes back if the salesperson pitches product, talks about pricing, or rushes. Warms visibly if the salesperson asks whether their PPP works for her and checks whether their anticipated questions are the right ones. Never breaks character. Never coaches the salesperson."
+        },
+        {
+          "name": "Derek Osei",
+          "role": "CFO, Brightline Dental Group (22 clinics)",
+          "situation": "Brightline is consolidating vendors after a bad experience: their last software vendor overpromised, missed the go-live by six months and locked them into a three-year contract. Derek took this meeting because his COO asked him to. His unspoken worries: 'Will you overpromise like the last one?' and 'Am I going to get locked in again?'",
+          "behavior": "Skeptical, numbers-focused, dry. Tests the salesperson early with a pointed question about why they are different. Warms up when the salesperson states clear intent, shows understanding of multi-site dental or healthcare finance, names his likely concerns about overpromising and lock-in before he does, and checks whether those are the right concerns. Gets colder at hype, superlatives or contract talk. Never breaks character. Never coaches the salesperson."
+        },
+        {
+          "name": "Priya Nair",
+          "role": "Procurement Manager, Halcyon Foods (regional food manufacturer)",
+          "situation": "Priya is comparing four vendors for a packaging-line maintenance contract and has back-to-back meetings today. She is friendly but rushed and wants to keep every vendor to the same short script. Her unspoken worry: 'Is this worth my time compared with the other three, and will you just try to upsell me?'",
+          "behavior": "Friendly, fast, practical. Asks for pricing within the first minute. If the salesperson politely defers price and explains what they want to understand first, she accepts if there is a clear Purpose, Process and Payoff with a time limit. Warms when the salesperson anticipates her comparison and upsell concerns and checks them. Gets impatient with long monologues. Never breaks character. Never coaches the salesperson."
+        }
+      ]
     },
     {
       "id": "reflect",
@@ -309,7 +788,34 @@
       ],
       "model_answer": "Objective: get agreement to a discovery meeting with the operations lead. Change: open with a customer-focused Purpose, preview my Ben Duffy in the Process statement, and actually tell the customer I prepared their questions instead of keeping it in my head.",
       "pass_score": 1,
-      "max_attempts": 1
+      "max_attempts": 1,
+      "script": [
+        "Last one, {name}, and it's the most important. Let's turn this into something you'll actually do."
+      ],
+      "activities": [
+        {
+          "type": "open",
+          "prompt": "Think about the real customer you used earlier. What's your objective for the next interaction, and what will you do differently because of this module?",
+          "rubric": [
+            "States a concrete objective (what the customer should do as a result of the interaction).",
+            "Names at least one specific change tied to a Relating skill (PPP, Ben Duffy, a Credibility factor, checking in)."
+          ],
+          "model_answer": "Objective: get agreement to a discovery meeting with the operations lead. Change: open with a customer-focused Purpose, preview my Ben Duffy in the Process statement, and actually tell the customer I prepared their questions instead of keeping it in my head.",
+          "pass_score": 1,
+          "max_attempts": 1
+        },
+        {
+          "type": "open",
+          "prompt": "Which one Relating skill will you use on your very next customer call, and exactly how will you use it?",
+          "rubric": [
+            "Names a specific Relating skill (PPP, Ben Duffy, a Credibility factor, checking in, a Third-Party Reference).",
+            "Describes concretely how or when they will use it with a real customer."
+          ],
+          "model_answer": "'On Thursday's call with the Halverson ops team I'll open with a PPP and preview two Ben Duffy questions: whether this is a pitch, and what we'd do with their data.'",
+          "pass_score": 1,
+          "max_attempts": 1
+        }
+      ]
     }
   ]
 }

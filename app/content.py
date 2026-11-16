@@ -23,13 +23,28 @@ def _validate(data: dict, path: Path) -> None:
         if key not in data:
             raise ValueError(f"{path.name}: missing '{key}'")
     for step in data["steps"]:
-        for key in ("id", "type", "title", "rubric"):
+        for key in ("id", "type", "title"):
             if key not in step:
                 raise ValueError(f"{path.name}: step missing '{key}': {step}")
         if step["type"] not in ("teach", "apply", "roleplay", "reflect"):
             raise ValueError(f"{path.name}: unknown step type {step['type']}")
-        if step["type"] == "roleplay" and "persona" not in step:
-            raise ValueError(f"{path.name}: roleplay step {step['id']} needs 'persona'")
+        if step["type"] == "roleplay":
+            if not (step.get("personas") or step.get("persona")) or "rubric" not in step:
+                raise ValueError(f"{path.name}: roleplay step {step['id']} needs 'personas' and 'rubric'")
+            continue
+        acts = step.get("activities") or []
+        if not acts:
+            raise ValueError(f"{path.name}: step {step['id']} needs at least one activity")
+        for a in acts:
+            t = a.get("type")
+            if t == "choice" and not (a.get("options") and 0 <= a.get("answer", 0) < len(a["options"])):
+                raise ValueError(f"{path.name}: bad choice activity in {step['id']}: {a.get('prompt')}")
+            if t == "order" and len(a.get("items", [])) < 2:
+                raise ValueError(f"{path.name}: order activity in {step['id']} needs 2+ items")
+            if t == "open" and not a.get("rubric"):
+                raise ValueError(f"{path.name}: open activity in {step['id']} needs a rubric")
+            if t not in ("choice", "order", "open"):
+                raise ValueError(f"{path.name}: unknown activity type {t} in {step['id']}")
 
 
 def get(module_id: str) -> dict:
