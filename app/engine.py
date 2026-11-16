@@ -86,6 +86,13 @@ def _bot(state: dict, text: str, kind: str, step: dict | None, extra: dict | Non
     return msg
 
 
+def _clean_name(raw: str | None) -> str | None:
+    """First name only: letters, spaces, hyphens and apostrophes, 24 chars, capitalised."""
+    name = re.sub(r"[^\w '\-]", "", (raw or ""), flags=re.UNICODE).replace("_", "").strip()
+    name = (name.split() or [""])[0][:24]
+    return (name[0].upper() + name[1:]) if name else None
+
+
 def _personal(text: str, name: str | None) -> str:
     if name:
         return text.replace("{name}", name)
@@ -152,6 +159,9 @@ def _parse_choice(text: str, shown: list[dict]) -> str | None:
     if w and _SPOKEN.get(w[0]) in keys and (len(w) <= 3 or w[0] in ("a", "b", "c", "d")):
         if not (w[0] == "a" and len(w) > 3):     # "a rep who..." is prose, not option A
             return _SPOKEN[w[0]]
+    m = re.search(r"\b(?:option|answer|letter|it's|its|is|pick|choose|chose|with|say|go for)\s+([a-e])\b", text.lower())
+    if m and m.group(1).upper() in keys:
+        return m.group(1).upper()
     # Fuzzy match against option text (voice answers often paraphrase the option).
     said = set(_words(text))
     best, best_score = None, 0.0
@@ -230,9 +240,7 @@ def _advance(module: dict, state: dict) -> list[dict]:
 def start(module_id: str, learner_name: str | None = None) -> dict:
     module = content.get(module_id)
     session_id = uuid.uuid4().hex[:12]
-    name = (learner_name or "").strip()[:40] or None
-    if name:
-        name = name[0].upper() + name[1:]
+    name = _clean_name(learner_name)
     state = _new_state(module_id, name)
     msgs = _enter_step(module, state)
     db.save(session_id, module_id, state)
@@ -249,7 +257,33 @@ def get(session_id: str) -> dict | None:
 
 def _looks_like_question(text: str) -> bool:
     t = text.lower().strip()
-    return t.endswith("?") or (len(t.split()) <= 25 and t.split()[0:1] in (["what"], ["why"], ["how"], ["can"], ["could"], ["is"], ["does"], ["do"]))
+    if not t:
+        return False
+    return t.endswith("?") or (len(t.split()) <= 25 and t.split()[0] in
+                               ("what", "why", "how", "can", "could", "is", "does", "do", "when", "who", "which", "explain"))
+
+
+# Things people say instead of answering. Matched only on short, whole utterances so real answers are never hijacked.
+_INTENTS = {
+    "repeat": ("repeat", "repeat that", "repeat please", "say that again", "say it again", "again", "come again", "pardon",
+               "sorry", "what", "repeat the question", "what was the question", "can you repeat", "can you repeat that",
+               "one more time", "once more", "replay"),
+    "skip": ("skip", "skip this", "skip it", "skip this one", "next", "next one", "next question", "move on", "pass"),
+    "dontknow": ("i don't know", "i dont know", "don't know", "dont know", "no idea", "not sure", "i'm not sure",
+                 "im not sure", "idk", "no clue", "help", "help me", "hint", "a hint", "give me a hint", "i need a hint",
+                 "i need help", "teach me", "i'm stuck", "im stuck", "stuck", "tell me", "tell me the answer",
+                 "what's the answer", "whats the answer", "show me the answer", "i give up"),
+    "restart": ("restart", "start over", "start again", "restart the module"),
+}
+
+
+def _intent(text: str) -> str | None:
+    t = re.sub(r"[^a-z' ]", "", text.lower()).strip()
+    t = re.sub(r"^(please|um|uh|sorry|hey|ok|okay)\s+|\s+(please|thanks)$", "", t).strip() or t
+    for name, phrases in _INTENTS.items():
+        if t in phrases:
+            return name
+    return None
 
 
 def message(session_id: str, text: str) -> dict | None:
@@ -258,28 +292,73 @@ def message(session_id: str, text: str) -> dict | None:
         return None
     module = content.get(state["module_id"])
     step = _step(module, state)
-    text = (text or "").strip()
-    state["history"].append({"role": "user", "text": text, "step_id": step["id"] if step else None})
+    text = (text or "").strip()[:4000]
     out: list[dict] = []
+    if not text:
+        out.append(_bot(state, "I didn't catch anything there. Try again.", "info", step))
+        db.save(session_id, state["module_id"], state)
+        return {"session_id": session_id, "messages": out, "progress": _progress(module, state)}
+    state["history"].append({"role": "user", "text": text, "step_id": step["id"] if step else None})
+    intent = _intent(text)
 
     if state["phase"] == "done" or step is None:
-        out.append(_bot(state, "The module is complete. Tap Restart to run it again, with fresh questions.", "info", None))
+        if intent == "restart":
+            out += _do_command(module, state, step, "restart")
+        else:
+            out.append(_bot(state, "The module is complete. Tap Restart to run it again, with fresh questions.", "info", None))
+    elif intent == "restart":
+        out.append(_bot(state, "To start over, tap Restart at the top. Your progress will be cleared.", "info", step))
     elif state["phase"] == "roleplay":
-        out += _roleplay_turn(module, state, step, text)
+        if intent == "dontknow":
+            out += _do_command(module, state, step, "hint")
+        elif intent == "repeat":
+            out += _do_command(module, state, step, "repeat_question")
+        elif intent == "skip":
+            out += _do_command(module, state, step, "skip")
+        else:
+            out += _roleplay_turn(module, state, step, text)
+    elif intent in ("repeat", "skip"):
+        out += _do_command(module, state, step, "repeat_question" if intent == "repeat" else "skip")
     else:
         act = state["act"]
-        if act["type"] == "choice":
+        if intent == "dontknow":
+            out += _dont_know(module, state, step, act)
+        elif act["type"] == "choice":
             out += _choice_turn(module, state, step, act, text)
         elif act["type"] == "order":
             out += _order_turn(module, state, step, act, text)
         elif _looks_like_question(text) and len(text.split()) <= 25:
             out.append(_bot(state, provider().answer_question(module, step, text, step.get("script", [])), "answer", step))
             out.append(_activity_msg(state, step))
+        elif len(_words(text)) < 4:
+            out.append(_bot(state, "I need a bit more than that to give you useful feedback. A sentence or two is plenty. "
+                                   "Or say 'hint' if you're stuck.", "info", step))
         else:
             out += _open_turn(module, state, step, act, text)
 
     db.save(session_id, state["module_id"], state)
     return {"session_id": session_id, "messages": out, "progress": _progress(module, state)}
+
+
+def _dont_know(module, state, step, act) -> list[dict]:
+    """'I don't know' / 'hint'. Quick checks reveal the answer and move on; open questions get a nudge, no penalty."""
+    state["streak"] = 0
+    if act["type"] == "choice":
+        right = next(o for o in act["shown"] if o["key"] == act["correct_key"])
+        _record(state, step, 0, 1, False)
+        out = [_bot(state, f"No problem. It's {right['key']}: {right['text']}. {act['why']}", "feedback", step,
+                    {"score": 0, "max_score": 1, "passed": False, "chosen": None, "correct": act["correct_key"], "quick": True})]
+        return out + _advance(module, state)
+    if act["type"] == "order":
+        n = len(act["items"])
+        _record(state, step, 0, n, False)
+        out = [_bot(state, f"No problem. The order is: {', '.join(act['items'])}. {act['why']}", "feedback", step,
+                    {"score": 0, "max_score": n, "passed": False, "chosen_order": [], "correct_order": act["correct_order"], "quick": True})]
+        return out + _advance(module, state)
+    tips = act["rubric"]
+    tip = tips[min(state["attempt"], len(tips) - 1)].rstrip(".")
+    return [_bot(state, f"No problem, here's a nudge. A strong answer does this: {tip[0].lower() + tip[1:]}. "
+                        "Give it a go in your own words, or say 'skip' to move on.", "hint", step)]
 
 
 def _not_understood(module, state, step, act, text, how: str) -> list[dict]:
@@ -290,9 +369,9 @@ def _not_understood(module, state, step, act, text, how: str) -> list[dict]:
 
 
 def _choice_turn(module, state, step, act, text) -> list[dict]:
-    key = _parse_choice(text, act["shown"])
+    key = None if (text.endswith("?") and len(_words(text)) > 2) else _parse_choice(text, act["shown"])
     if key is None:
-        return _not_understood(module, state, step, act, text, "Tap one of the options, or say the letter, like 'B'.")
+        return _not_understood(module, state, step, act, text, "I couldn't match that to an option. Tap one, or say its letter. You can also say 'hint' or 'skip'.")
     correct = key == act["correct_key"]
     right = next(o for o in act["shown"] if o["key"] == act["correct_key"])
     if correct:
@@ -312,7 +391,7 @@ def _order_turn(module, state, step, act, text) -> list[dict]:
     got = _parse_order(text, n)
     if got is None:
         return _not_understood(module, state, step, act, text,
-                               f"Tap the items in order, or say all {n} letters, like 'C, A, B'.")
+                               f"I need all {n} items. Tap them in order, or say the {n} letters in order. You can also say 'hint' or 'skip'.")
     right = sum(1 for a, b in zip(got, act["correct_order"]) if a == b)
     perfect = right == n
     if perfect:
@@ -366,32 +445,50 @@ def _roleplay_turn(module: dict, state: dict, step: dict, text: str) -> list[dic
     return [_bot(state, reply, "customer", step, {"speaker": state["persona"]["name"]})]
 
 
-def command(session_id: str, cmd: str) -> dict | None:
-    state = _load(session_id)
-    if not state:
-        return None
-    module = content.get(state["module_id"])
-    step = _step(module, state)
+def _do_command(module: dict, state: dict, step: dict | None, cmd: str) -> list[dict]:
     out: list[dict] = []
     if cmd == "skip" and step is not None:
         mx = (state.get("act") or {}).get("max_score") or len(step.get("rubric", [])) or 1
         state["scores"].setdefault(step["id"], {"score": 0, "max_score": mx, "passed": False})
         state["streak"] = 0
         out += _advance(module, state)
-    elif cmd == "repeat" and step is not None:
+    elif cmd in ("repeat", "repeat_question") and step is not None:
+        # repeat = replay the lesson then the question; repeat_question = just the question (or the customer's last line)
         name = state.get("learner_name")
-        out += [_bot(state, _personal(b, name), "teach", step, {"beat": i + 1, "beats": len(step["script"])})
-                for i, b in enumerate(step.get("script", []))]
+        if cmd == "repeat" and state["phase"] != "roleplay":
+            out += [_bot(state, _personal(b, name), "teach", step, {"beat": i + 1, "beats": len(step["script"])})
+                    for i, b in enumerate(step.get("script", []))]
         if state["phase"] == "asked" and state.get("act"):
             out.append(_activity_msg(state, step))
+        elif state["phase"] == "roleplay":
+            last = next((t["text"] for t in reversed(state["transcript"]) if t["role"] == "customer"), None)
+            p = state["persona"]
+            if last:
+                out.append(_bot(state, last, "customer", step, {"speaker": p["name"]}))
+            else:
+                out.append(_bot(state, f"You're the salesperson meeting {p['name']}, {p['role']}. Open the meeting with your "
+                                       "Purpose, Process and Payoff. Say 'end call' when you're done.", "teach", step))
     elif cmd == "hint" and step is not None and state["phase"] == "roleplay":
         out.append(_bot(state, provider().hint(module, {**step, "persona": state["persona"]}, state["transcript"]), "hint", step))
+    elif cmd == "hint" and step is not None and state["phase"] == "asked":
+        out += _dont_know(module, state, step, state["act"])
     elif cmd == "end_call" and step is not None and state["phase"] == "roleplay":
         out += _roleplay_turn(module, state, step, "end call")
     elif cmd == "restart":
         state.update(_new_state(state["module_id"], state.get("learner_name")))
         out += _enter_step(module, state)
+    elif step is None:
+        out.append(_bot(state, "The module is complete. Tap Restart to run it again.", "info", None))
     else:
-        out.append(_bot(state, "That isn't available right now.", "info", step))
+        out.append(_bot(state, "That isn't available at this point.", "info", step))
+    return out
+
+
+def command(session_id: str, cmd: str) -> dict | None:
+    state = _load(session_id)
+    if not state:
+        return None
+    module = content.get(state["module_id"])
+    out = _do_command(module, state, _step(module, state), cmd)
     db.save(session_id, state["module_id"], state)
     return {"session_id": session_id, "messages": out, "progress": _progress(module, state)}

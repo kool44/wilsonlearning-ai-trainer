@@ -96,6 +96,7 @@ let lastStepId = null, activeCard = null;
 function stepTitle(id) { const p = state.progress; const i = p ? p.steps.findIndex(s => s.id === id) : -1; return i >= 0 ? `Step ${i + 1} · ${p.steps[i].title}` : ""; }
 function divider(stepId) {
   if (!stepId || stepId === lastStepId) return; lastStepId = stepId;
+  [...chat.children].forEach(c => c.classList.add("old"));
   const d = document.createElement("div"); d.className = "divider"; d.textContent = stepTitle(stepId); chat.appendChild(d);
 }
 function addMsg(m, { instant = false, live = false } = {}) {
@@ -108,7 +109,8 @@ function addMsg(m, { instant = false, live = false } = {}) {
   if (m.kind === "customer") tag = m.speaker || "Customer";
   else if (m.kind === "feedback") tag = m.quick ? (m.passed ? "Correct" : "Not quite") : `Feedback · ${m.score}/${m.max_score}`;
   else if (m.kind === "activity") tag = m.label || "Your turn";
-  else if (m.kind === "hint") tag = "Coach (role-play paused)";
+  else if (m.kind === "hint") tag = state.progress?.phase === "roleplay" ? "Coach · role-play paused" : "Hint";
+  else if (m.kind === "retry") tag = "Try again";
   else if (m.kind === "complete") tag = "Module complete";
   else if (m.kind === "answer") tag = "Good question";
   if (tag) { const t = document.createElement("span"); t.className = "tag"; t.textContent = tag; el.appendChild(t); }
@@ -128,8 +130,16 @@ function addMsg(m, { instant = false, live = false } = {}) {
   chat.appendChild(el); chat.scrollTop = chat.scrollHeight;
   return el;
 }
+function retireCards() {
+  chat.querySelectorAll(".options:not(.retired)").forEach(box => {
+    box.classList.add("retired"); box.querySelectorAll(".opt").forEach(b => b.disabled = true);
+    box.parentElement.querySelector(".order-status")?.remove();
+  });
+  activeCard = null;
+}
 function renderActivity(el, a, disabled) {
-  if (a.type === "open") { activeCard = null; return; }
+  retireCards();
+  if (a.type === "open") return;
   const box = document.createElement("div"); box.className = "options " + a.type;
   const picked = [];
   const status = document.createElement("div"); status.className = "order-status";
@@ -139,7 +149,7 @@ function renderActivity(el, a, disabled) {
     b.innerHTML = `<span class="k">${o.key}</span><span class="t"></span>`; b.querySelector(".t").textContent = o.text;
     b.disabled = disabled;
     b.onclick = () => {
-      if (state.busy) return;
+      if (state.busy || box.classList.contains("retired")) return;
       if (a.type === "choice") { box.querySelectorAll(".opt").forEach(x => x.disabled = true); b.classList.add("picked"); sendText(o.key, `${o.key}. ${o.text}`); return; }
       if (b.classList.contains("picked")) return;
       picked.push(o.key); b.classList.add("picked"); b.querySelector(".k").textContent = picked.length;
@@ -151,10 +161,11 @@ function renderActivity(el, a, disabled) {
     };
     box.appendChild(b);
   });
+  box.reset = () => { picked.length = 0; box.querySelectorAll(".opt").forEach(x => { x.disabled = false; x.classList.remove("picked"); x.querySelector(".k").textContent = x.dataset.key; }); status.hidden = false; statusText.textContent = a.type === "order" ? `Tap the ${a.options.length} items in the right order` : ""; };
   if (a.type === "order" && !disabled) {
     statusText.textContent = `Tap the ${a.options.length} items in the right order`;
     const reset = document.createElement("button"); reset.className = "link"; reset.textContent = "Reset";
-    reset.onclick = () => { picked.length = 0; box.querySelectorAll(".opt").forEach(x => { x.classList.remove("picked"); x.querySelector(".k").textContent = x.dataset.key; }); statusText.textContent = `Tap the ${a.options.length} items in the right order`; };
+    reset.onclick = () => { if (state.busy) return; picked.length = 0; box.querySelectorAll(".opt").forEach(x => { x.classList.remove("picked"); x.querySelector(".k").textContent = x.dataset.key; }); statusText.textContent = `Tap the ${a.options.length} items in the right order`; };
     status.appendChild(reset);
   }
   el.appendChild(box); if (a.type === "order") el.appendChild(status);
@@ -164,8 +175,9 @@ function markCard(box, m) {
   box.querySelectorAll(".opt").forEach(b => {
     b.disabled = true;
     if (m.correct) { if (b.dataset.key === m.correct) b.classList.add("right"); else if (b.dataset.key === m.chosen) b.classList.add("wrong"); }
-    if (m.correct_order) { const pos = m.chosen_order.indexOf(b.dataset.key); const ok = m.correct_order[pos] === b.dataset.key; b.classList.add(ok ? "right" : "wrong"); }
+    if (m.correct_order) { const pos = m.chosen_order.indexOf(b.dataset.key); if (pos >= 0) b.classList.add(m.correct_order[pos] === b.dataset.key ? "right" : "wrong"); else b.querySelector(".k").textContent = m.correct_order.indexOf(b.dataset.key) + 1; }
   });
+  box.classList.add("retired"); box.parentElement.querySelector(".order-status")?.remove();
   activeCard = null;
 }
 function showQuick(items) {
@@ -202,6 +214,11 @@ function renderProgress(p) {
     if (sc) { tot += sc.score; mx += sc.max_score; }
   });
   $("#score-total").textContent = `${tot} / ${mx}`;
+  $("#score-pill").textContent = `${tot} / ${mx}`; $("#score-pill").hidden = false;
+  const done = p.phase === "done";
+  $("#btn-repeat").disabled = done; $("#btn-skip").disabled = done; $("#btn-restart").disabled = false;
+  $("#btn-repeat").textContent = p.phase === "roleplay" ? "Repeat last line" : "Replay lesson";
+  $("#btn-skip").textContent = p.phase === "roleplay" ? "Skip call" : "Skip step";
   $("#step-now").textContent = p.step_id ? `Step ${p.step_index + 1} of ${p.step_total}: ${p.step_title}` : "Module complete";
   $("#bar-fill").style.width = `${Math.round(100 * p.step_index / p.step_total)}%`;
   const st = $("#streak"); st.hidden = (p.streak || 0) < 2; st.textContent = `🔥 ${p.streak} in a row`;
@@ -214,7 +231,8 @@ function renderProgress(p) {
     $("#turns").textContent = `Turn ${p.turns_used} / ${p.max_turns}`;
   }
   const tapOnly = p.phase === "asked" && (p.activity_type === "choice" || p.activity_type === "order");
-  input.placeholder = rp ? "You are the salesperson. Speak to the customer…" : tapOnly ? "Tap an option above, say the letter, or ask a question…" : "Type your answer, or tap the mic and speak…";
+  input.placeholder = p.phase === "done" ? "Module complete" : rp ? "Speak to the customer…" : tapOnly ? "Tap an option, or ask a question…" : "Type or speak your answer…";
+  input.disabled = p.phase === "done"; $("#btn-mic").disabled = p.phase === "done" || state.busy; $("#btn-send").disabled = p.phase === "done" || state.busy;
 }
 const pause = (ms) => new Promise(r => setTimeout(r, ms));
 async function playMessages(msgs) {
@@ -227,7 +245,7 @@ async function playMessages(msgs) {
     const customer = m.kind === "customer";
     Avatar.persona(customer ? "customer" : "coach", customer ? (m.speaker || "Customer") : "Facilitator");
     $("#stage-line").textContent = customer ? `${m.speaker || "Customer"} is speaking` :
-      m.kind === "feedback" ? (m.passed ? "Nice one!" : "Here's my feedback") : m.kind === "hint" ? "Quick coaching tip" :
+      m.kind === "feedback" ? (m.passed ? "Nice one!" : "Here's my feedback") : m.kind === "hint" ? "Quick coaching tip" : m.kind === "info" ? "One sec" : m.kind === "retry" ? "Try again" :
       m.kind === "activity" ? (m.label || "Your turn") : m.kind === "answer" ? "Good question" : stepTitle(m.step_id) || "Teaching";
     $("#stage-sub").textContent = m.kind === "teach" && m.beats > 1 ? `${m.beat} of ${m.beats}` : "";
     if (m.kind === "feedback") Avatar.set(m.passed ? "happy" : "idle");
@@ -249,17 +267,21 @@ function afterPlay({ noMic = false } = {}) {
   const auto = !noMic && $("#handsfree").checked && !listening;
   if (p?.phase === "asked") {
     const tap = p.activity_type === "choice" || p.activity_type === "order";
-    showQuick([["Say that again", () => cmd("repeat")]]);
+    showQuick([["Repeat question", () => cmd("repeat_question")], [tap ? "I don't know" : "Hint", () => cmd("hint")], ["Skip", () => cmd("skip")]]);
     if (auto) toggleMic();
     if (!listening) setStatus("yourturn", tap ? "Tap your answer, or say the letter" : "Type or speak your answer");
   } else {
     if (auto && p?.phase === "roleplay") toggleMic();
+    if (p?.phase === "roleplay") showQuick([["Repeat last line", () => cmd("repeat_question")], ["Teach me", () => cmd("hint")]]);
     if (!listening) setStatus("yourturn", p?.phase === "roleplay" ? "Speak to the customer" : "");
   }
   chat.scrollTop = chat.scrollHeight;
 }
 function setBusy(b, label) {
-  state.busy = b; $("#btn-send").disabled = b; $("#btn-mic").disabled = b; $("#btn-hint").disabled = b; $("#btn-endcall").disabled = b;
+  state.busy = b; const fin = state.progress?.phase === "done";
+  $("#btn-send").disabled = b || fin; $("#btn-mic").disabled = b || fin; $("#btn-hint").disabled = b; $("#btn-endcall").disabled = b;
+  ["#btn-repeat", "#btn-skip", "#btn-restart"].forEach(id => { $(id).disabled = b || !state.sessionId || (fin && id !== "#btn-restart"); });
+  chat.classList.toggle("busy", b);
   if (b) { setStatus("thinking", label || "Thinking…"); $("#stage-line").textContent = label || "Let me think about that…"; const t = document.createElement("div"); t.className = "typing"; t.id = "typing"; t.innerHTML = "<i></i><i></i><i></i>"; chat.appendChild(t); chat.scrollTop = chat.scrollHeight; }
   else { $("#typing")?.remove(); }
 }
@@ -285,6 +307,9 @@ async function start() {
     setBusy(false); renderProgress(res.progress); await playMessages(res.messages);
   } catch (e) { setBusy(false); addMsg({ role: "bot", kind: "info", text: "Couldn't start: " + e.message }); $("#btn-start").disabled = false; }
 }
+function retryCard() {   // a failed send must not leave the tapped card dead
+  const box = [...chat.querySelectorAll(".options:not(.retired)")].pop(); if (box?.reset) box.reset();
+}
 async function sendText(text, display) {
   if (!text || state.busy) return;
   if (listening) rec.stop();
@@ -294,7 +319,7 @@ async function sendText(text, display) {
   const slow = p && (p.phase === "roleplay" || p.activity_type === "open");
   setBusy(true, p?.phase === "roleplay" ? `${p.persona?.name?.split(" ")[0] || "The customer"} is thinking…` : slow ? "Reading your answer…" : "Checking…");
   try { const res = await api(`/api/session/${state.sessionId}/message`, { text }); setBusy(false); renderProgress(res.progress); await playMessages(res.messages); }
-  catch (e) { setBusy(false); addMsg({ role: "bot", kind: "info", text: "Something went wrong: " + e.message }); setStatus("idle", "Error"); }
+  catch (e) { setBusy(false); addMsg({ role: "bot", kind: "info", text: "Something went wrong: " + e.message + " Your answer wasn't sent. Try again." }); retryCard(); afterPlay({ noMic: true }); }
 }
 async function send() {
   const text = input.value.trim(); if (!text || state.busy) return;
@@ -302,9 +327,9 @@ async function send() {
   await sendText(text); input.focus();
 }
 async function cmd(c) {
-  if (state.busy) return; stopSpeaking(true); showQuick([]); setBusy(true, c === "end_call" ? "Scoring your call…" : c === "hint" ? "Pausing the role-play…" : "One moment…");
-  try { const res = await api(`/api/session/${state.sessionId}/command`, { cmd: c }); setBusy(false); if (c === "restart") { chat.innerHTML = ""; lastStepId = null; } renderProgress(res.progress); await playMessages(res.messages); }
-  catch (e) { setBusy(false); addMsg({ role: "bot", kind: "info", text: e.message }); }
+  if (state.busy) return; stopSpeaking(true); showQuick([]); setBusy(true, c === "end_call" ? "Scoring your call…" : c === "hint" && state.progress?.phase === "roleplay" ? "Pausing the role-play…" : "One moment…");
+  try { const res = await api(`/api/session/${state.sessionId}/command`, { cmd: c }); setBusy(false); if (c === "restart") { chat.innerHTML = ""; lastStepId = null; activeCard = null; } renderProgress(res.progress); await playMessages(res.messages); }
+  catch (e) { setBusy(false); addMsg({ role: "bot", kind: "info", text: e.message }); afterPlay({ noMic: true }); }
 }
 function autosize() { input.style.height = "auto"; input.style.height = Math.min(input.scrollHeight, 160) + "px"; }
 
@@ -317,12 +342,47 @@ $("#btn-send").onclick = send;
 $("#btn-mic").onclick = toggleMic;
 $("#learner-name").addEventListener("keydown", (e) => { if (e.key === "Enter") start(); });
 $("#btn-stop").onclick = () => stopSpeaking();
-$("#btn-repeat").onclick = () => { if (state.sessionId) cmd("repeat"); };
-$("#btn-skip").onclick = () => { if (state.sessionId) cmd("skip"); };
+function ask(title, body, okLabel) {
+  // In-page confirm: window.confirm() is blocked in embedded browsers and iframes, which made Restart look dead.
+  return new Promise(res => {
+    $("#dialog-title").textContent = title; $("#dialog-body").textContent = body; $("#dialog-ok").textContent = okLabel;
+    const d = $("#dialog"); d.hidden = false; $("#dialog-ok").focus();
+    const close = (v) => { d.hidden = true; d.onclick = null; document.removeEventListener("keydown", onKey, true); res(v); };
+    const onKey = (e) => { if (e.key === "Escape") { e.stopPropagation(); close(false); } };
+    document.addEventListener("keydown", onKey, true);
+    $("#dialog-ok").onclick = () => close(true); $("#dialog-cancel").onclick = () => close(false);
+    d.onclick = (e) => { if (e.target === d) close(false); };
+  });
+}
+$("#btn-repeat").onclick = () => { if (state.sessionId) cmd(state.progress?.phase === "roleplay" ? "repeat_question" : "repeat"); };
+$("#btn-skip").onclick = async () => {
+  if (!state.sessionId || state.busy) return;
+  if (state.progress?.phase === "roleplay" && !(await ask("Skip the practice call?", "You'll get no score for it and move to the last step.", "Skip call"))) return;
+  cmd("skip");
+};
 $("#btn-hint").onclick = () => cmd("hint");
-$("#btn-endcall").onclick = () => { if (confirm("End the call and get your feedback?")) cmd("end_call"); };
-$("#btn-restart").onclick = () => { if (!state.sessionId) return; if (confirm("Restart the module with fresh questions?")) cmd("restart"); };
-$("#tts").onchange = () => { if (!$("#tts").checked) stopSpeaking(); };
+$("#btn-endcall").onclick = async () => { if (state.busy) return; if (await ask("End the call?", "I'll score your call against the Relating protocol and give you feedback.", "End call")) cmd("end_call"); };
+$("#btn-restart").onclick = async () => {
+  if (!state.sessionId || state.busy) return;
+  stopSpeaking(true);
+  if (await ask("Restart the module?", "Your score and progress are cleared. You start again at step 1 with fresh questions.", "Restart")) cmd("restart");
+  else afterPlay({ noMic: true });
+};
+function syncToggles() {
+  const v = $("#tts").checked, h = $("#handsfree").checked;
+  $("#btn-voice").textContent = v ? "🔊" : "🔇"; $("#btn-voice").setAttribute("aria-pressed", v); $("#btn-voice").title = v ? "Voice is on. Tap to mute." : "Voice is off. Tap to turn on.";
+  $("#btn-hf").setAttribute("aria-pressed", h); $("#btn-hf").classList.toggle("on", h);
+  try { localStorage.setItem("trainer.prefs", JSON.stringify({ v, h })); } catch (_) {}
+}
+try { const pr = JSON.parse(localStorage.getItem("trainer.prefs") || "null"); if (pr) { $("#tts").checked = pr.v; $("#handsfree").checked = pr.h; } } catch (_) {}
+$("#btn-voice").onclick = () => { $("#tts").checked = !$("#tts").checked; $("#tts").onchange(); };
+$("#btn-hf").onclick = () => {
+  if (!rec) { addMsg({ role: "bot", kind: "info", text: "Hands-free needs speech recognition. Use Chrome or Edge." }); return; }
+  $("#handsfree").checked = !$("#handsfree").checked; syncToggles();
+};
+$("#handsfree").onchange = syncToggles;
+syncToggles();
+$("#tts").onchange = () => { syncToggles(); if (!$("#tts").checked && (playQueue || synth?.speaking)) stopSpeaking(); };
 input.addEventListener("input", () => { autosize(); if (playQueue || synth?.speaking) stopSpeaking(); });   // typing interrupts the bot
 input.addEventListener("keydown", (e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); send(); } });
 document.addEventListener("keydown", (e) => { if (e.key === "Escape" && (playQueue || synth?.speaking)) stopSpeaking(); });
@@ -333,7 +393,7 @@ async function resume(sid) {
   const lastAct = res.progress.phase === "asked" ? res.messages.map(m => m.kind).lastIndexOf("activity") : -1;
   res.messages.forEach((m, i) => { addMsg(m, { instant: i !== lastAct || m.kind !== "activity" }); });
   if (lastAct >= 0 && res.messages.slice(lastAct + 1).some(m => m.role === "user" || m.kind === "feedback")) activeCard = null;
-  renderProgress(res.progress); afterPlay(); input.focus();
+  renderProgress(res.progress); afterPlay(); chat.scrollTo({ top: chat.scrollHeight, behavior: "instant" }); input.focus();
 }
 (async () => {
   let sid = null; try { sid = localStorage.getItem("trainer.session"); } catch (_) {} if (!sid) return;

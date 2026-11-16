@@ -24,16 +24,18 @@
 
   <main id="main">
     <header id="topbar">
-      <div>
-        <div id="step-now">—</div>
-        <span id="streak" class="streak" hidden></span>
+      <div class="top-left">
+        <div id="step-now">Welcome</div>
         <div id="status" class="status idle"><span class="dot"></span><span id="status-text">Ready</span></div>
+        <span id="streak" class="streak" hidden></span>
       </div>
       <div class="actions">
-        <button id="btn-stop" class="danger" hidden>■ Stop</button>
-        <button id="btn-repeat" title="Explain again">Repeat</button>
-        <button id="btn-skip" title="Skip this step">Skip</button>
-        <button id="btn-restart" title="Restart module">Restart</button>
+        <button id="btn-stop" class="danger" hidden title="Stop talking and show the rest as text (Esc)">■ Stop</button>
+        <span id="score-pill" class="pill" title="Your score so far" hidden>0 / 0</span>
+        <button id="btn-voice" class="icon" title="Turn the voice on or off" aria-pressed="true">🔊</button>
+        <button id="btn-repeat" title="Hear this lesson and its question again" disabled>Replay lesson</button>
+        <button id="btn-skip" title="Skip this step (scores zero)" disabled>Skip step</button>
+        <button id="btn-restart" title="Start the module again with fresh questions" disabled>Restart</button>
       </div>
     </header>
     <div id="progress-bar" hidden><i id="bar-fill"></i></div>
@@ -41,9 +43,15 @@
     <section id="start-card">
       <h1>The Counselor Salesperson</h1>
       <h2 id="start-module">Learning and Applying the Skills of Relating</h2>
-      <p>About 20 minutes. Short spoken lessons, quick tap-to-answer checks, a few questions about your own customers, and a live practice call with an AI customer. Speak or type, and interrupt any time. Every run draws different questions and a different customer.</p>
+      <p>About 20 minutes, 12 short steps. Every run draws different questions and a different customer.</p>
+      <ol class="how">
+        <li><b>Listen</b><span>A short spoken lesson, two or three lines. Tap Stop any time to read it instead.</span></li>
+        <li><b>Answer</b><span>One question per step: tap an option, put items in order, or answer in your own words.</span></li>
+        <li><b>Get feedback</b><span>Instant feedback, then the next step. Near the end you run a live practice call with an AI customer.</span></li>
+      </ol>
+      <p class="tip">Speak or type. Stuck? Say or tap <b>Hint</b>. You can also say “repeat” or “skip”.</p>
       <label>Your first name <input id="learner-name" placeholder="optional" autocomplete="given-name"></label>
-      <button id="btn-start" class="primary">Start module</button>
+      <button id="btn-start" class="primary">Start</button>
     </section>
 
     <section id="persona" class="persona-card" hidden>
@@ -71,10 +79,15 @@
       <div id="avatar" class="avatar" hidden><div class="pulse"></div></div>
       <textarea id="input" rows="1" placeholder="Type your answer, or tap the mic and speak…"></textarea>
       <button id="btn-mic" title="Tap to talk, tap again to stop">🎤</button>
+      <button id="btn-hf" class="icon" title="Hands-free: the mic opens after each question and sends when you stop talking" aria-pressed="false">Hands-free</button>
       <button id="btn-send" class="primary">Send</button>
     </footer>
   </main>
 </div>
+<div id="dialog" class="dialog" hidden><div class="dialog-box" role="dialog" aria-modal="true">
+  <h3 id="dialog-title"></h3><p id="dialog-body"></p>
+  <div class="dialog-actions"><button id="dialog-cancel">Cancel</button><button id="dialog-ok" class="primary"></button></div>
+</div></div>
 <script src="/static/avatar.js"></script>
 <script src="/static/app.js"></script>
 </body>

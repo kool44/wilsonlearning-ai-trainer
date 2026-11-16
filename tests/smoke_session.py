@@ -74,6 +74,14 @@ def main() -> int:
         assert r["progress"]["step_index"] == 1 and r["progress"]["streak"] == 1
         print("choice parse/answer ok")
 
+        # things people say instead of answering never get graded as answers
+        step_before = r["progress"]["step_index"]
+        for said, kind in (("say that again", "activity"), ("ok", "info"), ("", "info")):
+            r = c.post(f"/api/session/{sid}/message", json={"text": said}).json()
+            assert r["messages"][-1]["kind"] == kind and r["progress"]["step_index"] == step_before, (said, r["messages"])
+            assert r["progress"]["attempt"] == 0
+        print("spoken commands ok")
+
         # wrong answer resets streak
         r = answer(c, sid, r, right=False)
         assert r["progress"]["streak"] == 0 and r["progress"]["step_index"] == 2

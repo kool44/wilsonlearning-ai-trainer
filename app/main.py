@@ -31,7 +31,7 @@ class MessageBody(BaseModel):
 
 
 class CommandBody(BaseModel):
-    cmd: str  # skip | repeat | restart | hint | end_call | continue
+    cmd: str  # skip | repeat | repeat_question | restart | hint | end_call
 
 
 @app.get("/api/health")
