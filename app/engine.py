@@ -231,6 +231,8 @@ def start(module_id: str, learner_name: str | None = None) -> dict:
     module = content.get(module_id)
     session_id = uuid.uuid4().hex[:12]
     name = (learner_name or "").strip()[:40] or None
+    if name:
+        name = name[0].upper() + name[1:]
     state = _new_state(module_id, name)
     msgs = _enter_step(module, state)
     db.save(session_id, module_id, state)

@@ -5,12 +5,13 @@ const chat = $("#chat"), input = $("#input"), avatar = $("#avatar");
 
 // ---------- status line
 const AV_STATE = { speaking: "speaking", listening: "listening", thinking: "thinking", yourturn: "idle", idle: "idle" };
-const STAGE_LINE = { speaking: "", listening: "I'm listening…", thinking: "Let me think about that…", yourturn: "Your turn.", idle: "Ready when you are." };
+const STAGE_LINE = { speaking: "", listening: "I'm listening…", thinking: "Let me think about that…", yourturn: "Your turn", idle: "Ready when you are." };
 function setStatus(kind, text) {
-  const el = $("#status"); el.className = "status " + kind; $("#status-text").textContent = text;
-  $("#btn-stop").hidden = kind !== "speaking";
+  const el = $("#status"); el.className = "status " + kind;
+  $("#status-text").textContent = kind === "yourturn" ? (text ? `Your turn · ${text}` : "Your turn") : text;
+  $("#btn-stop").hidden = kind !== "speaking" && !playQueue;
   if (window.Avatar?.el) Avatar.set(AV_STATE[kind] || "idle");
-  if (kind !== "speaking") { $("#stage-line").textContent = STAGE_LINE[kind] ?? text; $("#stage-sub").textContent = kind === "yourturn" ? text.replace(/^Your turn\.?\s*/, "") : ""; }
+  if (kind !== "speaking") { $("#stage-line").textContent = STAGE_LINE[kind] ?? text; $("#stage-sub").textContent = kind === "yourturn" ? text : ""; }
 }
 
 // ---------- voice out: browser text-to-speech
@@ -24,11 +25,24 @@ function loadVoices() {
   if (pref >= 0) sel.value = pref;
 }
 if (synth) { loadVoices(); synth.onvoiceschanged = loadVoices; }
-function stopSpeaking() {
+// One "play" = the queue of bot messages from one server reply. Stop must end the whole queue, not just the
+// line being spoken: the rest is shown as text at once so nothing is lost.
+let playGen = 0, playQueue = null, playCurrent = null;
+function stopSpeaking(opts) {
+  const quiet = opts === true || opts?.quiet;       // quiet: caller is about to send something, skip the "your turn" setup
   speakToken++;                       // invalidates any queued speak() promises
   if (synth) synth.cancel();
   avatar.classList.remove("speaking");
-  if (state.progress) setStatus("yourturn", state.progress.phase === "roleplay" ? "Your turn. Speak to the customer." : "Your turn");
+  const wasPlaying = !!playQueue;
+  if (wasPlaying) {
+    playGen++;
+    if (playCurrent) playCurrent.el.reveal(playCurrent.text.length);
+    playQueue.forEach(m => addMsg(m, { instant: true, live: true }));
+    playQueue = null; playCurrent = null;
+  }
+  if (quiet) return;
+  if (wasPlaying) afterPlay({ noMic: true });
+  else if (state.progress && !state.busy && !listening) afterPlay({ noMic: true });
 }
 function speak(text, onWord) {
   if (!synth || !$("#tts").checked) { onWord && onWord(text.length); return Promise.resolve(); }
@@ -66,13 +80,13 @@ if (SR) {
     input.value = (baseText + " " + finalT + " " + interim).trim(); autosize();
     if ($("#handsfree").checked) { clearTimeout(silenceTimer); silenceTimer = setTimeout(() => { if (listening && input.value.trim()) { rec.stop(); send(); } }, 1800); }
   };
-  rec.onend = () => { listening = false; $("#btn-mic").classList.remove("listening"); if (!state.busy && !synth?.speaking) setStatus("yourturn", "Your turn"); };
+  rec.onend = () => { listening = false; $("#btn-mic").classList.remove("listening"); if (!state.busy && !playQueue) afterPlay({ noMic: true }); };
   rec.onerror = (e) => { if (e.error === "not-allowed") addMsg({ role: "bot", kind: "info", text: "Microphone blocked. Allow mic access in the browser, or type instead." }); };
 } else { $("#btn-mic").title = "Speech recognition not supported here. Use Chrome or Edge."; }
 function toggleMic() {
   if (!rec) { addMsg({ role: "bot", kind: "info", text: "Speech input needs Chrome or Edge. You can type instead." }); return; }
   if (listening) { rec.stop(); return; }
-  stopSpeaking();                      // barge-in: tapping the mic interrupts the bot
+  stopSpeaking(true);                  // barge-in: tapping the mic interrupts the bot
   baseText = input.value; listening = true; $("#btn-mic").classList.add("listening");
   setStatus("listening", "Listening… tap mic again when done"); rec.start();
 }
@@ -84,7 +98,7 @@ function divider(stepId) {
   if (!stepId || stepId === lastStepId) return; lastStepId = stepId;
   const d = document.createElement("div"); d.className = "divider"; d.textContent = stepTitle(stepId); chat.appendChild(d);
 }
-function addMsg(m, { instant = false } = {}) {
+function addMsg(m, { instant = false, live = false } = {}) {
   if (m.role !== "user") divider(m.step_id);
   const el = document.createElement("div");
   const cls = ["msg", m.role === "user" ? "user" : "bot"];
@@ -103,7 +117,7 @@ function addMsg(m, { instant = false } = {}) {
   body.textContent = caption ? "" : m.text;
   el.appendChild(body);
   el.reveal = (n) => { body.textContent = m.text.slice(0, n); chat.scrollTop = chat.scrollHeight; };
-  if (m.kind === "activity" && m.activity) renderActivity(el, m.activity, instant);
+  if (m.kind === "activity" && m.activity) renderActivity(el, m.activity, instant && !live);
   if (m.kind === "feedback" && !m.quick && (m.met?.length || m.missed?.length)) {
     const r = document.createElement("div"); r.className = "rubric";
     (m.met || []).forEach(x => { const d = document.createElement("div"); d.textContent = x; r.appendChild(d); });
@@ -205,7 +219,11 @@ function renderProgress(p) {
 const pause = (ms) => new Promise(r => setTimeout(r, ms));
 async function playMessages(msgs) {
   showQuick([]);
-  for (const m of msgs) {
+  const gen = ++playGen;
+  playQueue = msgs.slice();
+  if (!$("#tts").checked || !synth) setStatus("speaking", "Tap Stop to jump to the question");
+  while (playQueue && playQueue.length) {
+    const m = playQueue.shift();
     const customer = m.kind === "customer";
     Avatar.persona(customer ? "customer" : "coach", customer ? (m.speaker || "Customer") : "Facilitator");
     $("#stage-line").textContent = customer ? `${m.speaker || "Customer"} is speaking` :
@@ -214,22 +232,31 @@ async function playMessages(msgs) {
     $("#stage-sub").textContent = m.kind === "teach" && m.beats > 1 ? `${m.beat} of ${m.beats}` : "";
     if (m.kind === "feedback") Avatar.set(m.passed ? "happy" : "idle");
     const el = addMsg(m);
+    playCurrent = { el, text: m.text };
     if (m.kind === "activity" && m.activity.type !== "open") { await speak(m.text); }
-    else { await speak(m.text, el.reveal); el.reveal(m.text.length); }
-    if (!$("#tts").checked || !synth) await pause(m.kind === "teach" ? 500 : 250);
-    else await pause(150);
+    else { await speak(m.text, el.reveal); if (gen === playGen) el.reveal(m.text.length); }
+    if (gen !== playGen) return;                 // stopped or superseded: stopSpeaking already flushed the rest
+    await pause(!$("#tts").checked || !synth ? (m.kind === "teach" ? 500 : 250) : 150);
+    if (gen !== playGen) return;
   }
+  playQueue = null; playCurrent = null;
   afterPlay();
 }
-function afterPlay() {
+function afterPlay({ noMic = false } = {}) {
   const p = state.progress;
-  if (p?.phase === "done") { addScorecard(p); setStatus("idle", "Module complete"); return; }
+  chat.scrollTop = chat.scrollHeight;
+  if (p?.phase === "done") { if (!chat.querySelector(".scorecard")) addScorecard(p); setStatus("idle", "Module complete"); return; }
+  const auto = !noMic && $("#handsfree").checked && !listening;
   if (p?.phase === "asked") {
     const tap = p.activity_type === "choice" || p.activity_type === "order";
     showQuick([["Say that again", () => cmd("repeat")]]);
-    if ($("#handsfree").checked && !listening) toggleMic();
-    if (!listening) setStatus("yourturn", tap ? "Tap your answer, or say the letter" : "Your turn to answer");
-  } else if (!listening) setStatus("yourturn", p?.phase === "roleplay" ? "Your turn. Speak to the customer." : "Your turn");
+    if (auto) toggleMic();
+    if (!listening) setStatus("yourturn", tap ? "Tap your answer, or say the letter" : "Type or speak your answer");
+  } else {
+    if (auto && p?.phase === "roleplay") toggleMic();
+    if (!listening) setStatus("yourturn", p?.phase === "roleplay" ? "Speak to the customer" : "");
+  }
+  chat.scrollTop = chat.scrollHeight;
 }
 function setBusy(b, label) {
   state.busy = b; $("#btn-send").disabled = b; $("#btn-mic").disabled = b; $("#btn-hint").disabled = b; $("#btn-endcall").disabled = b;
@@ -246,7 +273,7 @@ async function api(path, body) {
 function showApp() { $("#start-card").hidden = true; $("#stage").hidden = false; $("#chat").hidden = false; $("#composer").hidden = false; $("#progress-bar").hidden = false; }
 async function start() {
   $("#btn-start").disabled = true;
-  const name = $("#learner-name").value.trim();
+  let name = $("#learner-name").value.trim(); name = name.charAt(0).toUpperCase() + name.slice(1);
   showApp();                                    // switch screens at once; don't wait on the network
   chat.innerHTML = ""; lastStepId = null;
   Avatar.set("happy"); $("#stage-line").textContent = name ? `Hi ${name}!` : "Hi there!"; $("#stage-sub").textContent = "Getting your first lesson ready…";
@@ -261,7 +288,7 @@ async function start() {
 async function sendText(text, display) {
   if (!text || state.busy) return;
   if (listening) rec.stop();
-  stopSpeaking(); showQuick([]);
+  stopSpeaking(true); showQuick([]);
   addMsg({ role: "user", text: display || text });
   const p = state.progress;
   const slow = p && (p.phase === "roleplay" || p.activity_type === "open");
@@ -275,7 +302,7 @@ async function send() {
   await sendText(text); input.focus();
 }
 async function cmd(c) {
-  if (state.busy) return; stopSpeaking(); showQuick([]); setBusy(true, c === "end_call" ? "Scoring your call…" : c === "hint" ? "Pausing the role-play…" : "One moment…");
+  if (state.busy) return; stopSpeaking(true); showQuick([]); setBusy(true, c === "end_call" ? "Scoring your call…" : c === "hint" ? "Pausing the role-play…" : "One moment…");
   try { const res = await api(`/api/session/${state.sessionId}/command`, { cmd: c }); setBusy(false); if (c === "restart") { chat.innerHTML = ""; lastStepId = null; } renderProgress(res.progress); await playMessages(res.messages); }
   catch (e) { setBusy(false); addMsg({ role: "bot", kind: "info", text: e.message }); }
 }
@@ -289,16 +316,16 @@ $("#btn-start").onclick = start;
 $("#btn-send").onclick = send;
 $("#btn-mic").onclick = toggleMic;
 $("#learner-name").addEventListener("keydown", (e) => { if (e.key === "Enter") start(); });
-$("#btn-stop").onclick = stopSpeaking;
+$("#btn-stop").onclick = () => stopSpeaking();
 $("#btn-repeat").onclick = () => { if (state.sessionId) cmd("repeat"); };
 $("#btn-skip").onclick = () => { if (state.sessionId) cmd("skip"); };
 $("#btn-hint").onclick = () => cmd("hint");
 $("#btn-endcall").onclick = () => { if (confirm("End the call and get your feedback?")) cmd("end_call"); };
 $("#btn-restart").onclick = () => { if (!state.sessionId) return; if (confirm("Restart the module with fresh questions?")) cmd("restart"); };
 $("#tts").onchange = () => { if (!$("#tts").checked) stopSpeaking(); };
-input.addEventListener("input", () => { autosize(); if (synth?.speaking) stopSpeaking(); });   // typing interrupts the bot
-input.addEventListener("keydown", (e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); send(); } if (e.key === "Escape") stopSpeaking(); });
-document.addEventListener("keydown", (e) => { if (e.key === "Escape") stopSpeaking(); });
+input.addEventListener("input", () => { autosize(); if (playQueue || synth?.speaking) stopSpeaking(); });   // typing interrupts the bot
+input.addEventListener("keydown", (e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); send(); } });
+document.addEventListener("keydown", (e) => { if (e.key === "Escape" && (playQueue || synth?.speaking)) stopSpeaking(); });
 async function resume(sid) {
   const res = await api(`/api/session/${sid}`);
   state.sessionId = sid; state.moduleId = res.progress.module_id;
